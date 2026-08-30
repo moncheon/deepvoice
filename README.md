@@ -34,4 +34,3 @@ CPS = 0.5 × Voice Presence ROC-AUC + 0.5 × Music Presence ROC-AUC
 Run0 submission ID는 `76229`, DACON 실행 시간은 `1분 46초`입니다. Baseline 대비 총점은 `-0.0391454524`이며, 공식 가중치로 분해하면 격차의 약 90.6%가 ADS에서 발생합니다. 따라서 다음 라운드는 unseen generator·codec에 대한 ADS 일반화를 우선하고, CPS는 Baseline의 전용 presence branch와 Run0을 결합하는 hybrid를 먼저 검증합니다.
 
 대용량 organizer weight는 GitHub 이력에 넣지 않고 private Hugging Face 저장소에 보관합니다. 고정 링크와 SHA-256은 [`modellink.yaml`](modellink.yaml), 설명과 복구 절차는 [`format/baseline_submit/model/HF_STORAGE.md`](format/baseline_submit/model/HF_STORAGE.md)에 있습니다.
-
