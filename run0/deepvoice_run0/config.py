@@ -30,7 +30,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "seed": 2608,
         "batch_size": 2,
         "effective_batch_size": 8,
-        "auto_batch_candidates": [4, 2],
+        "auto_batch_candidates": [2],
         "auto_batch_memory_gate_gib": 70,
         "max_segments_per_file": 6,
         "epochs": 10,

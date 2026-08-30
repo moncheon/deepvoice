@@ -120,6 +120,7 @@ def _choose_batch_size(
         candidate = int(candidate)
         if candidate <= 0:
             continue
+        print(json.dumps({"event": "auto_batch_start", "batch_size": candidate}), flush=True)
         dataset = ManifestDataset(ordered[:candidate], manifest_dir, audio_settings)
         batch = collate_records([dataset[index] for index in range(len(dataset))])
         outputs = None
@@ -134,11 +135,21 @@ def _choose_batch_size(
             peak = int(torch.cuda.max_memory_allocated())
             if peak <= memory_gate_bytes:
                 model.zero_grad(set_to_none=True)
+                print(json.dumps({
+                    "event": "auto_batch_selected",
+                    "batch_size": candidate,
+                    "peak_vram_bytes": peak,
+                }, sort_keys=True), flush=True)
                 return candidate, peak
         except torch.cuda.OutOfMemoryError as error:
             # Do not retain the CUDA exception traceback: checkpoint frames can
             # otherwise keep the failed graph alive and poison the next candidate.
             last_error_message = str(error).splitlines()[0]
+            print(json.dumps({
+                "event": "auto_batch_rejected",
+                "batch_size": candidate,
+                "reason": last_error_message,
+            }, sort_keys=True), flush=True)
         finally:
             model.zero_grad(set_to_none=True)
             del outputs, losses, batch, dataset
@@ -344,7 +355,7 @@ def train(
             raise RuntimeError(f"resume state mismatch; missing={missing}, unexpected={unexpected}")
 
     memory_gate = int(training.get("auto_batch_memory_gate_gib", 70)) * 1024**3
-    batch_candidates = training.get("auto_batch_candidates", [4, 2])
+    batch_candidates = training.get("auto_batch_candidates", [2])
     batch_size, smoke_peak = _choose_batch_size(
         model,
         by_split["train"],
@@ -446,6 +457,13 @@ def train(
             "elapsed_seconds": float(time.monotonic() - started),
         }
         history.append(epoch_record)
+        print(json.dumps({
+            "event": "epoch_complete",
+            "epoch": epoch + 1,
+            "train_loss": epoch_record["train_loss"],
+            "dev_weighted_score": dev_metrics["weighted_score"],
+            "elapsed_seconds": epoch_record["elapsed_seconds"],
+        }, sort_keys=True), flush=True)
         score = float(dev_metrics["weighted_score"])
         if score > best_score:
             best_score = score
