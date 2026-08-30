@@ -117,7 +117,7 @@ OOF/holdout CSV는 `evaluate.py`로 전체 및 generator/source/codec group별 �
 powershell -ExecutionPolicy Bypass -File run0/tools/build_submission.ps1
 ```
 
-스크립트는 `script.py`, `config.toml`, `requirements.txt`, `deepvoice_run0/`, `model/`만 포함하며 weights/backbone이 없으면 실패합니다.
+스크립트는 최상위에 `script.py`, `requirements.txt`, `model/`만 두며, 설정과 Python 패키지는 `model/` 안에 넣습니다. 성능·분산·라이선스 gate를 통과한 weights/backbone이 없으면 실패합니다.
 
 Run0 학습 가중치가 생기기 전 리더보드 파이프라인 자체를 점검할 때는 제공 baseline을 control로 패키징합니다.
 
@@ -131,4 +131,14 @@ powershell -ExecutionPolicy Bypass -File run0/tools/build_baseline_control_submi
 
 [hf_space/DEPLOY.md](hf_space/DEPLOY.md)는 private Docker Space와 일회성 HF Job 실행 절차입니다. private worker/corpus/model 저장소를 생성했고 Space commit `e4a885d3d06093c41f0e967a535f3a61b9d4e18b`의 build와 인증된 `/health`를 확인한 뒤 pause했습니다. 하드웨어 변경 권한이 없는 fine-grained token에서는 Space GPU API가 401이므로, 고정 digest의 PyTorch image와 private Space source를 read-only mount한 4시간 제한 Job을 사용했습니다. 완료 Job `6a93901e984507d9db4ec523`은 L40S에서 2,666초 실행됐고, wheel 구조/hash 검토 → 모델 safetensors/hash/license 검토 → 3-file CUDA smoke → 1,320개 생성 → private dataset upload를 순서대로 통과했습니다. 실제 L40S 비용은 약 $1.33이며, 앞선 검토 단계에서 차단된 41초 Job까지 포함하면 약 $1.35입니다.
 
-성능 학습 Job은 `train_job_entrypoint.sh`를 사용합니다. 8개 corpus shard와 WavLM source snapshot을 각각 private dataset/model volume에서 읽고 모든 해시를 재검증한 뒤 A100 auto-batch smoke, 최대 10 epoch 학습, epoch별 full dev 공식 점수 선택, best checkpoint의 holdout 평가를 수행합니다. 산출물은 먼저 private model repo의 `runs/<run-id>/`에만 업로드되며 성능·라이선스·해시 검토 후 root artifact로 승격합니다.
+성능 학습 Job은 `train_job_entrypoint.sh`를 사용합니다. 8개 corpus shard와 WavLM source snapshot을 각각 private dataset/model volume에서 읽고 모든 해시를 재검증한 뒤 A100 batch-2 smoke, 유효 batch 8, epoch당 4,800개 가중표본, 최대 10 epoch 학습을 수행합니다. 매 epoch full dev 공식 점수로 best checkpoint를 선택하고, 선택이 끝난 뒤 holdout을 한 번만 평가합니다. PyTorch 2.6.0 CUDA 12.4 공식 이미지는 digest `sha256:77f17f843507062875ce8be2a6f76aa6aa3df7f9ef1e31d9d7432f4b0f563dee`로 고정합니다.
+
+산출물은 먼저 private model repo의 `runs/<run-id>/`에만 업로드됩니다. 아래 도구는 immutable repository revision에서 파일을 내려받아 `ARTIFACTS.json`의 크기와 SHA-256, 성능 gate, run/source provenance를 확인한 뒤에만 로컬 `model/`과 private `final/run0-v1/`로 승격합니다.
+
+```powershell
+python run0/tools/promote_training_run.py `
+  --repo-id datahj/deepvoice-run0-model-v1 `
+  --revision <40-character-model-repo-commit> `
+  --run-id <run-id> `
+  --source-commit <40-character-source-commit>
+```
