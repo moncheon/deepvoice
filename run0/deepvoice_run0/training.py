@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import gc
 import hashlib
 import json
 import math
@@ -114,31 +115,37 @@ def _choose_batch_size(
         batch_size = min(int(value) for value in candidates)
         return batch_size, 0
     ordered = sorted(records, key=lambda record: record.duration_sec, reverse=True)
-    last_error: Exception | None = None
+    last_error_message: str | None = None
     for candidate in candidates:
         candidate = int(candidate)
         if candidate <= 0:
             continue
         dataset = ManifestDataset(ordered[:candidate], manifest_dir, audio_settings)
         batch = collate_records([dataset[index] for index in range(len(dataset))])
+        outputs = None
+        losses = None
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
         model.zero_grad(set_to_none=True)
         try:
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                _, losses = _loss(model, batch, device=device, training=training)
+                outputs, losses = _loss(model, batch, device=device, training=training)
             losses["total"].backward()
             peak = int(torch.cuda.max_memory_allocated())
             if peak <= memory_gate_bytes:
                 model.zero_grad(set_to_none=True)
-                torch.cuda.empty_cache()
                 return candidate, peak
         except torch.cuda.OutOfMemoryError as error:
-            last_error = error
+            # Do not retain the CUDA exception traceback: checkpoint frames can
+            # otherwise keep the failed graph alive and poison the next candidate.
+            last_error_message = str(error).splitlines()[0]
         finally:
             model.zero_grad(set_to_none=True)
+            del outputs, losses, batch, dataset
+            gc.collect()
             torch.cuda.empty_cache()
-    raise RuntimeError("no auto-batch candidate passed the CUDA memory gate") from last_error
+    detail = f"; last CUDA error: {last_error_message}" if last_error_message else ""
+    raise RuntimeError(f"no auto-batch candidate passed the CUDA memory gate{detail}")
 
 
 def _metrics_from_arrays(labels: dict[str, list[int]], scores: np.ndarray) -> dict[str, float]:
@@ -337,7 +344,7 @@ def train(
             raise RuntimeError(f"resume state mismatch; missing={missing}, unexpected={unexpected}")
 
     memory_gate = int(training.get("auto_batch_memory_gate_gib", 70)) * 1024**3
-    batch_candidates = training.get("auto_batch_candidates", [8, 4, 2])
+    batch_candidates = training.get("auto_batch_candidates", [4, 2])
     batch_size, smoke_peak = _choose_batch_size(
         model,
         by_split["train"],

@@ -15,7 +15,7 @@ class TrainingEvidenceTests(unittest.TestCase):
         root = Path(__file__).parents[1]
         config = load_config(root / "config.toml")
         training = config["training"]
-        self.assertEqual(training["auto_batch_candidates"], [8, 4, 2])
+        self.assertEqual(training["auto_batch_candidates"], [4, 2])
         self.assertEqual(training["effective_batch_size"], 8)
         self.assertGreaterEqual(training["min_epochs"], 4)
         self.assertEqual(training["consistency_loss_weight"], 0.0)
