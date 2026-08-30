@@ -34,7 +34,9 @@ def roc_points(labels: Iterable[int], scores: Iterable[float]) -> tuple[np.ndarr
 
 def roc_auc(labels: Iterable[int], scores: Iterable[float]) -> float:
     fpr, tpr = roc_points(labels, scores)
-    integrate = getattr(np, "trapezoid", np.trapz)
+    integrate = getattr(np, "trapezoid", None)
+    if integrate is None:
+        integrate = np.trapz
     return float(integrate(tpr, fpr))
 
 

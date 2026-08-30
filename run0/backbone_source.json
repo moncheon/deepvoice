@@ -17,7 +17,7 @@
     "notes": "The pinned model card points to the UniSpeech CC BY-SA 3.0 license. Only the reviewed allowlist is promoted."
   },
   "files": {
-    "README.md": {
+    "MODEL_CARD.source.md": {
       "bytes": 3904,
       "sha256": "d417fc16b08e2f66f0af6b371e47a5f9f1f596f6c1c593f1214d360c41d7a27e"
     },

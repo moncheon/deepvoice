@@ -32,7 +32,7 @@ class TrainingEvidenceTests(unittest.TestCase):
         self.assertEqual(
             set(payload["files"]),
             {
-                "README.md", "config.json", "preprocessor_config.json",
+                "MODEL_CARD.source.md", "config.json", "preprocessor_config.json",
                 "pytorch_model.bin", "LICENSE-CC-BY-SA-3.0.txt", "ORIGIN.json",
             },
         )
