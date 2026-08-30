@@ -97,3 +97,11 @@ The same variable must be passed to the L4 benchmark Job so its 100-file
 quality/runtime sample is drawn from the evaluated holdout rather than from a
 different ledger. Both training and benchmark reports record the relative path
 and SHA-256 of the selected split.
+
+The benchmark copies the promoted safetensors from the read-only Hub mount to
+the Job's local `/tmp` filesystem and verifies every copied file against
+`ARTIFACTS.json` before model loading. This avoids long-lived mmap access to a
+remote FUSE mount. After each 16/12/8-segment pass it uploads
+`reports/L4_BENCHMARK_PROGRESS.json`; a late Job failure therefore preserves
+the completed measurements even though the final consolidated report is not
+yet valid.

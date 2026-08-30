@@ -27,9 +27,21 @@ from deepvoice_run0.submission import read_submission_template, validate_predict
 WORKSPACE = Path("/workspace")
 DATASET_MOUNT = Path(os.environ.get("RUN0_DATASET_MOUNT", "/dataset"))
 MODEL_MOUNT = Path(os.environ.get("RUN0_MODEL_MOUNT", "/model-final"))
-MODEL_PATH = MODEL_MOUNT / os.environ.get("RUN0_FINAL_MODEL_RELATIVE", "final/run0-v1")
+MOUNTED_MODEL_PATH = MODEL_MOUNT / os.environ.get("RUN0_FINAL_MODEL_RELATIVE", "final/run0-v1")
 OUTPUT = Path("/tmp/run0-l4-benchmark")
+MODEL_PATH = OUTPUT / "model"
 CORPUS_METADATA = DATASET_MOUNT / "corpus-v1"
+REQUIRED_MODEL_FILES = {
+    "ARTIFACTS.json",
+    "TRAINING_REPORT.json",
+    "model_config.json",
+    "run0.safetensors",
+    "backbone/LICENSE-CC-BY-SA-3.0.txt",
+    "backbone/ORIGIN.json",
+    "backbone/config.json",
+    "backbone/model.safetensors",
+    "backbone/preprocessor_config.json",
+}
 
 
 def split_path() -> Path:
@@ -45,6 +57,87 @@ def sha256_file(path: Path) -> str:
         while block := handle.read(1024 * 1024):
             digest.update(block)
     return digest.hexdigest()
+
+
+def stage_model() -> dict[str, object]:
+    """Copy verified model files off the Hub FUSE mount before mmap loading."""
+
+    artifact_path = MOUNTED_MODEL_PATH / "ARTIFACTS.json"
+    artifacts = json.loads(artifact_path.read_text(encoding="utf-8"))
+    if artifacts.get("format_version") != 1 or not isinstance(artifacts.get("files"), dict):
+        raise RuntimeError("invalid model ARTIFACTS.json")
+    entries = artifacts["files"]
+    missing = sorted((REQUIRED_MODEL_FILES - {"ARTIFACTS.json"}) - set(entries))
+    if missing:
+        raise RuntimeError(f"promoted model is missing required ledger entries: {missing}")
+    MODEL_PATH.mkdir(parents=True, exist_ok=False)
+    shutil.copy2(artifact_path, MODEL_PATH / "ARTIFACTS.json")
+    verified_bytes = 0
+    for relative in sorted(REQUIRED_MODEL_FILES - {"ARTIFACTS.json"}):
+        evidence = entries[relative]
+        source = MOUNTED_MODEL_PATH / Path(relative)
+        destination = MODEL_PATH / Path(relative)
+        if not source.is_file() or source.stat().st_size != int(evidence["bytes"]):
+            raise RuntimeError(f"mounted model size mismatch: {relative}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        if destination.stat().st_size != int(evidence["bytes"]):
+            raise RuntimeError(f"staged model size mismatch: {relative}")
+        if sha256_file(destination) != str(evidence["sha256"]):
+            raise RuntimeError(f"staged model SHA-256 mismatch: {relative}")
+        verified_bytes += destination.stat().st_size
+    return {
+        "source_relative": MOUNTED_MODEL_PATH.relative_to(MODEL_MOUNT).as_posix(),
+        "artifact_manifest_sha256": sha256_file(MODEL_PATH / "ARTIFACTS.json"),
+        "files_verified": len(REQUIRED_MODEL_FILES) - 1,
+        "bytes_verified": verified_bytes,
+    }
+
+
+def upload_report(path: Path, path_in_repo: str, message: str) -> None:
+    upload_environment = dict(os.environ)
+    upload_environment.pop("HF_HUB_OFFLINE", None)
+    upload_environment.pop("TRANSFORMERS_OFFLINE", None)
+    upload_code = (
+        "from huggingface_hub import HfApi; import sys; "
+        "HfApi().upload_file(repo_id=sys.argv[2], repo_type='model', "
+        "path_or_fileobj=sys.argv[1], path_in_repo=sys.argv[3], "
+        "commit_message=sys.argv[4])"
+    )
+    uploaded = subprocess.run(
+        [sys.executable, "-c", upload_code, str(path), os.environ["RUN0_MODEL_REPO"], path_in_repo, message],
+        env=upload_environment,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if uploaded.returncode != 0:
+        raise RuntimeError(f"benchmark report upload failed: {uploaded.stderr[-1000:]}")
+
+
+def resume_results(staged_model: dict[str, object]) -> dict[str, dict[str, object]]:
+    """Reuse only progress tied to this exact model, split, GPU, and torch build."""
+
+    import torch
+
+    progress_path = MODEL_MOUNT / "reports" / "L4_BENCHMARK_PROGRESS.json"
+    if not progress_path.is_file():
+        return {}
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+    expected = {
+        "model_artifacts_sha256": staged_model["artifact_manifest_sha256"],
+        "split_sha256": sha256_file(split_path()),
+        "gpu": torch.cuda.get_device_name(0),
+        "torch_version": torch.__version__,
+    }
+    if any(progress.get(name) != value for name, value in expected.items()):
+        print(json.dumps({"event": "benchmark_progress_ignored", "reason": "provenance_mismatch"}))
+        return {}
+    results = progress.get("results")
+    if not isinstance(results, dict) or not set(results).issubset({"16", "12", "8"}):
+        raise RuntimeError("invalid L4 benchmark progress result set")
+    print(json.dumps({"event": "benchmark_progress_resumed", "segments": sorted(results)}))
+    return results
 
 
 def select_records(limit: int = 100) -> list[dict[str, object]]:
@@ -159,19 +252,20 @@ def run_submission_smoke(max_segments: int) -> dict[str, object]:
 def main() -> None:
     import torch
 
-    if not MODEL_PATH.is_dir():
-        raise FileNotFoundError(MODEL_PATH)
+    if not MOUNTED_MODEL_PATH.is_dir():
+        raise FileNotFoundError(MOUNTED_MODEL_PATH)
     OUTPUT.mkdir(parents=True, exist_ok=False)
+    staged_model = stage_model()
     records = select_records(100)
     test_dir = extract_records(records)
     load_started = time.perf_counter()
     predictor = Predictor(MODEL_PATH, WORKSPACE / "config.toml", "cuda")
     load_seconds = time.perf_counter() - load_started
     torch.cuda.reset_peak_memory_stats()
-    results: dict[str, dict[str, object]] = {}
-    baseline_score: float | None = None
-    selected_segments: int | None = None
+    results = resume_results(staged_model)
     for segments in (16, 12, 8):
+        if str(segments) in results:
+            continue
         predictor.config["audio"]["max_segments"] = segments
         predictor.config["audio"]["uniform_segments"] = max(1, segments - 4)
         predictor.config["audio"]["novelty_segments"] = min(4, segments - 1)
@@ -193,10 +287,37 @@ def main() -> None:
             "peak_vram_bytes": peak,
             "metrics": metrics,
         }
-        if baseline_score is None:
-            baseline_score = float(metrics["weighted_score"])
-        score_drop = baseline_score - float(metrics["weighted_score"])
-        if selected_segments is None and estimated <= 2700 and peak <= 20 * 1024**3 and score_drop <= 0.02:
+        progress = {
+            "format_version": 1,
+            "status": "in_progress",
+            "gpu": torch.cuda.get_device_name(0),
+            "torch_version": torch.__version__,
+            "staged_model": staged_model,
+            "model_artifacts_sha256": staged_model["artifact_manifest_sha256"],
+            "results": results,
+            "split_relative": split_path().relative_to(DATASET_MOUNT).as_posix(),
+            "split_sha256": sha256_file(split_path()),
+        }
+        progress_path = OUTPUT / "L4_BENCHMARK_PROGRESS.json"
+        progress_path.write_text(
+            json.dumps(progress, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        upload_report(
+            progress_path,
+            "reports/L4_BENCHMARK_PROGRESS.json",
+            f"Save Run0 L4 benchmark progress after {segments} segments",
+        )
+    baseline_score = float(results["16"]["metrics"]["weighted_score"])
+    selected_segments: int | None = None
+    for segments in (16, 12, 8):
+        result = results[str(segments)]
+        score_drop = baseline_score - float(result["metrics"]["weighted_score"])
+        if (
+            selected_segments is None
+            and float(result["estimated_seconds_for_1200"]) <= 2700
+            and int(result["peak_vram_bytes"]) <= 20 * 1024**3
+            and score_drop <= 0.02
+        ):
             selected_segments = segments
     if selected_segments is None:
         raise RuntimeError("no segment count passed runtime, VRAM, and score gates")
@@ -209,30 +330,18 @@ def main() -> None:
         "results": results,
         "submission_smoke": smoke,
         "model_artifacts_sha256": sha256_file(MODEL_PATH / "ARTIFACTS.json"),
+        "staged_model": staged_model,
         "split_relative": split_path().relative_to(DATASET_MOUNT).as_posix(),
         "split_sha256": sha256_file(split_path()),
     }
     report_path = OUTPUT / "L4_BENCHMARK.json"
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    upload_environment = dict(os.environ)
-    upload_environment.pop("HF_HUB_OFFLINE", None)
-    upload_environment.pop("TRANSFORMERS_OFFLINE", None)
-    upload_code = (
-        "from huggingface_hub import HfApi; import sys; "
-        "HfApi().upload_file(repo_id=sys.argv[2], repo_type='model', "
-        "path_or_fileobj=sys.argv[1], path_in_repo='reports/L4_BENCHMARK.json', "
-        "commit_message='Add Run0 L4 benchmark evidence')"
+    upload_report(
+        report_path,
+        "reports/L4_BENCHMARK.json",
+        "Add Run0 L4 benchmark evidence",
     )
-    uploaded = subprocess.run(
-        [sys.executable, "-c", upload_code, str(report_path), os.environ["RUN0_MODEL_REPO"]],
-        env=upload_environment,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if uploaded.returncode != 0:
-        raise RuntimeError(f"benchmark report upload failed: {uploaded.stderr[-1000:]}")
     print(json.dumps(report, indent=2, sort_keys=True))
 
 

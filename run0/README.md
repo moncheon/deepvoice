@@ -158,6 +158,11 @@ production split은 Job 환경변수 `RUN0_SPLIT_RELATIVE=splits/domain-balanced
 명시합니다. 학습 sampler도 exact generator 모델명별 역빈도 대신 label + coarse
 generator domain별 역빈도를 사용하여 희귀 모델명 하나가 epoch을 과점하지 않게 합니다.
 
+L4 benchmark는 Hub mount의 safetensors를 직접 mmap하지 않습니다. 필요한 모델 파일을
+Job-local `/tmp`로 복사하면서 artifact ledger와 다시 대조한 뒤 로드하고, 16/12/8
+segment 측정이 하나 끝날 때마다 private model repo의
+`reports/L4_BENCHMARK_PROGRESS.json`에 중간 결과를 저장합니다.
+
 산출물은 먼저 private model repo의 `runs/<run-id>/`에만 업로드됩니다. 아래 도구는 immutable repository revision에서 파일을 내려받아 `ARTIFACTS.json`의 크기와 SHA-256, 성능 gate, run/source provenance를 확인한 뒤에만 로컬 `model/`과 private `final/run0-v1/`로 승격합니다.
 
 ```powershell
