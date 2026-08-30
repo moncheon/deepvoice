@@ -1,0 +1,70 @@
+{
+  "blocked_risky_files": [],
+  "file_count": 11,
+  "files": [
+    {
+      "bytes": 3787536020,
+      "path": "fake_songs/part_01.zip",
+      "sha256": "ea9772801ad5304194cf62c6cb3a4ab8dc44739064f80d78fddb536327d89d01"
+    },
+    {
+      "bytes": 3569868616,
+      "path": "fake_songs/part_02.zip",
+      "sha256": "55d71cf375ebe61539ba28b308fbe9d4c9d8a53119c5328ba477ed820ff27ab2"
+    },
+    {
+      "bytes": 3149140440,
+      "path": "fake_songs/part_03.zip",
+      "sha256": "209a753cfa5ac239ab3aef99fd8c4ce00dd5c24d0f478acad20b921ce6692653"
+    },
+    {
+      "bytes": 3123929935,
+      "path": "fake_songs/part_04.zip",
+      "sha256": "490c63521bb684654e2df1bbb85e9a49719f42d8f6d49c65fe832ef5a0ac8397"
+    },
+    {
+      "bytes": 132524507,
+      "path": "fake_songs.csv",
+      "sha256": "fb2dde96c8c57975f8840e4a7d01422b542b755543ffde85194a590963d1bba9"
+    },
+    {
+      "bytes": 501,
+      "path": "fetch.log",
+      "sha256": "e14ad552c20674a2775a60b8c417fe398a2942de50db61e36ab46d32b1b76f86"
+    },
+    {
+      "bytes": 3239343,
+      "path": "metadata.json",
+      "sha256": "4924f1582714a9f05cef63aec8d715b1947ee89cd8f9f487fbeb6936889e0fde"
+    },
+    {
+      "bytes": 5503,
+      "path": "README.md",
+      "sha256": "1adab4c9c50d83a8ae2d3218c209b793e9f5c3efc804757a24175b6b69c75142"
+    },
+    {
+      "bytes": 57003096,
+      "path": "test.csv",
+      "sha256": "8e7beffe7045107ae22c46e07abf48c3aa15ee9968f8c1b5197268ca042c14ca"
+    },
+    {
+      "bytes": 152327098,
+      "path": "train.csv",
+      "sha256": "960b1524c6edcf8727a6679f4ea88deac0cc5e55311b139ed60edd615e432b14"
+    },
+    {
+      "bytes": 9814768,
+      "path": "valid.csv",
+      "sha256": "f6c19177d64d0ff9315ad8b16fb296b2efeee8f537dfb65b1308c43489c6ed39"
+    }
+  ],
+  "format_version": 1,
+  "kind": "hf_dataset",
+  "license_id": "CC-BY-NC-4.0",
+  "license_url": "https://github.com/awsaf49/sonics/blob/main/LICENSE",
+  "repo_id_or_url": "awsaf49/sonics",
+  "reviewed_for_noncommercial_research": true,
+  "revision": "3788dca9f9f11ad92e9097ef4b58eee247661e7f",
+  "source": "sonics",
+  "total_bytes": 13985389827
+}

@@ -1,0 +1,12 @@
+{
+  "counts": {
+    "audioldm2": 64,
+    "mms_tts_kor": 1000,
+    "musicgen": 256
+  },
+  "files": 1320,
+  "fixture_only": false,
+  "format_version": 2,
+  "manifest_sha256": "24c127d08c5fce2d00ddf9cdd79706837e40d026ec8797f2b56631ebe8eb2504",
+  "total_bytes": 355254496
+}

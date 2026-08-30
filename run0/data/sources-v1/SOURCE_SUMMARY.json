@@ -1,0 +1,32 @@
+{
+  "bucket_split_counts": {
+    "music_0_dev": 18,
+    "music_0_holdout": 16,
+    "music_0_train": 107,
+    "music_1_dev": 38,
+    "music_1_holdout": 64,
+    "music_1_train": 218,
+    "voice_0_dev": 222,
+    "voice_0_holdout": 137,
+    "voice_0_train": 3551,
+    "voice_1_dev": 2241,
+    "voice_1_holdout": 1242,
+    "voice_1_train": 3917
+  },
+  "forced_holdout_generators": [
+    "AudioLDM2",
+    "MMS-TTS-KOR"
+  ],
+  "format_version": 2,
+  "leakage_audit": {
+    "leakage_keys": 0,
+    "records": 11771,
+    "split_counts": {
+      "dev": 2519,
+      "holdout": 1459,
+      "train": 7793
+    }
+  },
+  "manifest_sha256": "902f266be0de58f02e0231f6100e4bd81ca4ddbd4e05f90c10ab2cacc6d43a12",
+  "records": 11771
+}

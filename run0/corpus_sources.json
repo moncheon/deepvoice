@@ -1,0 +1,117 @@
+{
+  "format_version": 1,
+  "sources": {
+    "mlaad-tiny": {
+      "kind": "hf_dataset",
+      "repo_id": "mueller91/MLAAD-tiny",
+      "revision": "9143e5ea709575ebab6bec52840a1043aada7bb1",
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://huggingface.co/datasets/mueller91/MLAAD-tiny/blob/9143e5ea709575ebab6bec52840a1043aada7bb1/LICENSE",
+      "include": ["README.md", "LICENSE", "NOTICE_NO_COMMERCIAL_USE.txt", "fake/en/**"]
+    },
+    "mlaad-tiny-original-en": {
+      "kind": "hf_dataset",
+      "repo_id": "mueller91/MLAAD-tiny",
+      "revision": "9143e5ea709575ebab6bec52840a1043aada7bb1",
+      "license_id": "M-AILABS-permissive-redistribution",
+      "license_url": "https://huggingface.co/datasets/mueller91/MLAAD-tiny/blob/9143e5ea709575ebab6bec52840a1043aada7bb1/original/LICENSE",
+      "include": [
+        "README.md",
+        "original/LICENSE",
+        "original/en/dorothy_and_wizard_oz_*.wav",
+        "original/en/emerald_city_of_oz_*.wav",
+        "original/en/hunters_space_*.wav",
+        "original/en/jane_eyre_*.wav"
+      ]
+    },
+    "sonics": {
+      "kind": "hf_dataset",
+      "repo_id": "awsaf49/sonics",
+      "revision": "3788dca9f9f11ad92e9097ef4b58eee247661e7f",
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://github.com/awsaf49/sonics/blob/main/LICENSE",
+      "include": ["README.md", "fake_songs.csv", "metadata.json", "train.csv", "valid.csv", "test.csv", "fake_songs/part_01.zip", "fake_songs/part_02.zip", "fake_songs/part_03.zip", "fake_songs/part_04.zip"]
+    },
+    "mms-tts-kor": {
+      "kind": "hf_model",
+      "repo_id": "facebook/mms-tts-kor",
+      "revision": "1b6491366d2ed6ea8e4e735607155d9f0110df29",
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://huggingface.co/facebook/mms-tts-kor/blob/1b6491366d2ed6ea8e4e735607155d9f0110df29/README.md",
+      "include": ["README.md", "config.json", "model.safetensors", "special_tokens_map.json", "tokenizer_config.json", "vocab.json"]
+    },
+    "musicgen-small": {
+      "kind": "hf_model",
+      "repo_id": "facebook/musicgen-small",
+      "revision": "4c8334b02c6ec4e8664a91979669a501ec497792",
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://huggingface.co/facebook/musicgen-small/blob/4c8334b02c6ec4e8664a91979669a501ec497792/README.md",
+      "include": ["README.md", "config.json", "generation_config.json", "model.safetensors", "preprocessor_config.json", "special_tokens_map.json", "spiece.model", "tokenizer.json", "tokenizer_config.json"]
+    },
+    "audioldm2-music": {
+      "kind": "hf_model",
+      "repo_id": "cvssp/audioldm2-music",
+      "revision": "0019cb0bd4d314accff72aee1c3abd6f22929ba5",
+      "license_id": "CC-BY-NC-SA-4.0",
+      "license_url": "https://huggingface.co/cvssp/audioldm2-music/blob/0019cb0bd4d314accff72aee1c3abd6f22929ba5/README.md",
+      "include": ["README.md", "model_index.json", "**/*.json", "**/*.txt", "**/*.model", "**/*.safetensors"]
+    },
+    "zeroth-korean": {
+      "kind": "url_archive",
+      "url": "https://www.openslr.org/resources/40/zeroth_korean.tar.gz",
+      "filename": "zeroth_korean.tar.gz",
+      "revision": "openslr-slr40-2018-02-03",
+      "license_id": "CC-BY-4.0",
+      "license_url": "https://openslr.org/40/"
+    },
+    "zeroth-korean-hf": {
+      "kind": "hf_rows",
+      "repo_id": "Bingsu/zeroth-korean",
+      "revision": "bd173fe2c8ed0dccd47acb4eda77542593651622",
+      "source_dataset": "OpenSLR-SLR40-Zeroth-Korean",
+      "source_url": "https://openslr.org/40/",
+      "license_id": "CC-BY-4.0",
+      "license_url": "https://openslr.org/40/",
+      "audio_field": "audio",
+      "splits": {"train": 2500}
+    },
+    "fma-small": {
+      "kind": "url_bundle",
+      "revision": "fma-rc1-2017-05-09",
+      "license_id": "per-track-creative-commons",
+      "license_url": "https://github.com/mdeff/fma#acknowledgments-and-licenses",
+      "files": [
+        {
+          "url": "https://os.unil.cloud.switch.ch/fma/fma_metadata.zip",
+          "filename": "fma_metadata.zip",
+          "sha1": "f0df49ffe5f2a6008d7dc83c6915b31835dfe733"
+        },
+        {
+          "url": "https://os.unil.cloud.switch.ch/fma/fma_small.zip",
+          "filename": "fma_small.zip",
+          "sha1": "ade154f733639d52e35e32f5593efe5be76c6d70"
+        }
+      ]
+    },
+    "fma-instrumental-hf": {
+      "kind": "hf_rows",
+      "repo_id": "atoof/fma-music-descriptions",
+      "revision": "f49663449d038d2dcc0dbbe6b435b1cc7b3966ac",
+      "source_dataset": "FMA-music-descriptions-instrumental-subset",
+      "source_url": "https://freemusicarchive.org/",
+      "license_id": "per-track-creative-commons",
+      "license_url": "https://freemusicarchive.org/faq",
+      "audio_field": "audio",
+      "splits": {"train": 1000},
+      "filter": "instrumental_with_attribution"
+    },
+    "generated-open-v1": {
+      "kind": "hf_dataset",
+      "repo_id": "datahj/deepvoice-run0-corpus-v1",
+      "revision": "192e75d6f8eb1f9af3a56750ff84b6adfce92a6b",
+      "license_id": "composite-CC-BY-NC-and-CC-BY-NC-SA",
+      "license_url": "https://huggingface.co/datasets/datahj/deepvoice-run0-corpus-v1/blob/192e75d6f8eb1f9af3a56750ff84b6adfce92a6b/README.md",
+      "include": ["README.md", "generated-v1/**"]
+    }
+  }
+}

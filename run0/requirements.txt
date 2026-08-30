@@ -1,0 +1,3 @@
+# Run 0 declares no extra pip package beyond the intended evaluation image.
+# Verify torch, transformers, safetensors, numpy, and ffmpeg in the L4 dry run;
+# add only a dependency confirmed missing from that image.

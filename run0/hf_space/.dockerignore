@@ -1,0 +1,11 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+*.wav
+*.flac
+*.mp3
+*.safetensors
+data
+output
+model

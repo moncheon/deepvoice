@@ -1,0 +1,525 @@
+{
+  "blocked_members": [],
+  "format_version": 1,
+  "source": "PyPI wheels resolved from pinned direct requirements",
+  "status": "reviewed",
+  "wheel_count": 43,
+  "wheels": [
+    {
+      "bytes": 762952,
+      "filename": "PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "yaml/_yaml.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "3ad2a3decf9aaba3d29c8f537ac4b243e36bef957511b4766cb0057d32b0be85"
+    },
+    {
+      "bytes": 336647,
+      "filename": "accelerate-1.3.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "5788d9e6a7a9f80fed665cf09681c4dddd9dc056bea656db4140ffc285ce423e"
+    },
+    {
+      "bytes": 23492,
+      "filename": "audioread-3.0.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "4cdce70b8adc0da0a3c9e0d85fb10b3ace30fbdf8d1670fd443929b61d117c33"
+    },
+    {
+      "bytes": 166393,
+      "filename": "certifi-2025.1.31-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe"
+    },
+    {
+      "bytes": 467242,
+      "filename": "cffi-1.17.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "_cffi_backend.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "610faea79c43e44c71e1ec53a554553fa22321b65fae24889706c0a84d4ad86d"
+    },
+    {
+      "bytes": 143862,
+      "filename": "charset_normalizer-3.4.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "charset_normalizer/md.cpython-311-x86_64-linux-gnu.so",
+        "charset_normalizer/md__mypyc.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "fd4ec41f914fa74ad1b8304bbc634b3de73d2a0889bd32076342a573e0779e00"
+    },
+    {
+      "bytes": 9073,
+      "filename": "decorator-5.1.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"
+    },
+    {
+      "bytes": 3226075,
+      "filename": "diffusers-0.32.2-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "d7f182b49c7f428737ee3bf6397d463ec03b85f4f3b2c9470bd1d73292b609ff"
+    },
+    {
+      "bytes": 16164,
+      "filename": "filelock-3.17.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "533dc2f7ba78dc2f0f531fc6c4940addf7b70a481e269a5a3b93be94ffbe8338"
+    },
+    {
+      "bytes": 184484,
+      "filename": "fsspec-2025.2.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "9de2ad9ce1f85e1931858535bc882543171d197001a0a5eb2ddc04f1781ab95b"
+    },
+    {
+      "bytes": 464068,
+      "filename": "huggingface_hub-0.28.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "aa6b9a3ffdae939b72c464dbb0d7f99f56e649b55c3d52406f49e0a5a620c0a7"
+    },
+    {
+      "bytes": 70442,
+      "filename": "idna-3.10-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+    },
+    {
+      "bytes": 26971,
+      "filename": "importlib_metadata-8.6.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "02a89390c1e15fdfdc0d7c6b25cb3e62650d0494005c97d6f148bf5b9787525e"
+    },
+    {
+      "bytes": 301817,
+      "filename": "joblib-1.4.2-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "06d478d5674cbc267e7496a410ee875abd68e4340feff4490bcb7afb88060ae6"
+    },
+    {
+      "bytes": 12097,
+      "filename": "lazy_loader-0.4-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "342aa8e14d543a154047afb4ba8ef17f5563baad3fc610d7b15b213b0f119efc"
+    },
+    {
+      "bytes": 260089,
+      "filename": "librosa-0.10.2.post1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "dc882750e8b577a63039f25661b7e39ec4cfbacc99c1cffba666cd664fb0a7a0"
+    },
+    {
+      "bytes": 42361858,
+      "filename": "llvmlite-0.44.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "llvmlite/binding/libllvmlite.so"
+      ],
+      "sha256": "c5d22c3bfc842668168a786af4205ec8e3ad29fb1bc03fd11fd48460d0df64c1"
+    },
+    {
+      "bytes": 403671,
+      "filename": "msgpack-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "msgpack/_cmsgpack.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "5e1da8f11a3dd397f0a32c76165cf0c4eb95b31013a94f6ecc0b280c05c91b59"
+    },
+    {
+      "bytes": 3825411,
+      "filename": "numba-0.61.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "native_members": [
+        "numba/_devicearray.cpython-311-x86_64-linux-gnu.so",
+        "numba/_dispatcher.cpython-311-x86_64-linux-gnu.so",
+        "numba/_dynfunc.cpython-311-x86_64-linux-gnu.so",
+        "numba/_helperlib.cpython-311-x86_64-linux-gnu.so",
+        "numba/mviewbuf.cpython-311-x86_64-linux-gnu.so",
+        "numba/core/runtime/_nrt_python.cpython-311-x86_64-linux-gnu.so",
+        "numba/core/typeconv/_typeconv.cpython-311-x86_64-linux-gnu.so",
+        "numba/cuda/cudadrv/_extras.cpython-311-x86_64-linux-gnu.so",
+        "numba/experimental/jitclass/_box.cpython-311-x86_64-linux-gnu.so",
+        "numba/np/ufunc/_internal.cpython-311-x86_64-linux-gnu.so",
+        "numba/np/ufunc/_num_threads.cpython-311-x86_64-linux-gnu.so",
+        "numba/np/ufunc/omppool.cpython-311-x86_64-linux-gnu.so",
+        "numba/np/ufunc/tbbpool.cpython-311-x86_64-linux-gnu.so",
+        "numba/np/ufunc/workqueue.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "21c2fe25019267a608e2710a6a947f557486b4b0478b02e45a81cf606a05a7d4"
+    },
+    {
+      "bytes": 18252005,
+      "filename": "numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "numpy/fft/_pocketfft_internal.cpython-311-x86_64-linux-gnu.so",
+        "numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so",
+        "numpy/linalg/lapack_lite.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_sfc64.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/bit_generator.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_mt19937.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_bounded_integers.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_philox.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_common.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/mtrand.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_generator.cpython-311-x86_64-linux-gnu.so",
+        "numpy/random/_pcg64.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_umath_tests.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_struct_ufunc_tests.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_rational_tests.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_multiarray_tests.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_operand_flag_tests.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_simd.cpython-311-x86_64-linux-gnu.so",
+        "numpy/core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so",
+        "numpy.libs/libopenblas64_p-r0-0cf96a72.3.23.dev.so"
+      ],
+      "sha256": "666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5"
+    },
+    {
+      "bytes": 65451,
+      "filename": "packaging-24.2-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"
+    },
+    {
+      "bytes": 4484021,
+      "filename": "pillow-11.1.0-cp311-cp311-manylinux_2_28_x86_64.whl",
+      "native_members": [
+        "PIL/_imagingcms.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_imagingtk.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_imaging.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_webp.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_imagingmorph.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_imagingmath.cpython-311-x86_64-linux-gnu.so",
+        "PIL/_imagingft.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "837060a8599b8f5d402e97197d4924f05a2e0d68756998345c829c33186217b1"
+    },
+    {
+      "bytes": 18439,
+      "filename": "platformdirs-4.3.6-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb"
+    },
+    {
+      "bytes": 64574,
+      "filename": "pooch-1.8.2-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "3529a57096f7198778a5ceefd5ac3ef0e4d06a6ddaf9fc2d609b806f25302c47"
+    },
+    {
+      "bytes": 319672,
+      "filename": "protobuf-5.29.3-cp38-abi3-manylinux2014_x86_64.whl",
+      "native_members": [
+        "google/_upb/_message.abi3.so"
+      ],
+      "sha256": "c027e08a08be10b67c06bf2370b99c811c466398c357e615ca88c91c07f0910f"
+    },
+    {
+      "bytes": 287477,
+      "filename": "psutil-6.1.1-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "psutil/_psutil_posix.abi3.so",
+        "psutil/_psutil_linux.abi3.so"
+      ],
+      "sha256": "97f7cb9921fbec4904f522d972f0c0e1f4fabbdd4e0287813b21215074a0f160"
+    },
+    {
+      "bytes": 117552,
+      "filename": "pycparser-2.22-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc"
+    },
+    {
+      "bytes": 792727,
+      "filename": "regex-2024.11.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "regex/_regex.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "f2a19f302cd1ce5dd01a9099aaa19cae6173306d1302a43b627f62e21cf18ac0"
+    },
+    {
+      "bytes": 64928,
+      "filename": "requests-2.32.3-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"
+    },
+    {
+      "bytes": 461978,
+      "filename": "safetensors-0.5.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "safetensors/_safetensors_rust.abi3.so"
+      ],
+      "sha256": "3ab696dfdc060caffb61dbe4066b86419107a24c804a4e373ba59be699ebd8d5"
+    },
+    {
+      "bytes": 13497069,
+      "filename": "scikit_learn-1.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "sklearn/_isotonic.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_dist_metrics.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_radius_neighbors.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_middle_term_computer.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_datasets_pair.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_base.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_argkmin.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_radius_neighbors_classmode.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/_pairwise_distances_reduction/_argkmin_classmode.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/metrics/cluster/_expected_mutual_info_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/preprocessing/_target_encoder_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/preprocessing/_csr_polynomial_expansion.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/datasets/_svmlight_format_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/svm/_newrand.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/svm/_liblinear.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/svm/_libsvm_sparse.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/svm/_libsvm.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/tree/_criterion.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/tree/_splitter.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/tree/_utils.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/tree/_tree.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/tree/_partitioner.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_weight_vector.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/arrayfuncs.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_isfinite.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_openmp_helpers.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_sorting.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_seq_dataset.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_typedefs.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_fast_dict.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_random.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/sparsefuncs_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_vector_sentinel.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/murmurhash.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_cython_blas.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/utils/_heap.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/manifold/_barnes_hut_tsne.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/manifold/_utils.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/neighbors/_partition_nodes.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/neighbors/_ball_tree.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/neighbors/_kd_tree.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/neighbors/_quad_tree.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/linear_model/_cd_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/linear_model/_sag_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/linear_model/_sgd_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/feature_extraction/_hashing_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/_loss/_loss.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/decomposition/_online_lda_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/decomposition/_cdnmf_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/__check_build/_check_build.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_gradient_boosting.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/common.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/histogram.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/_predictor.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/_gradient_boosting.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/splitting.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/_bitset.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/ensemble/_hist_gradient_boosting/_binning.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_k_means_lloyd.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_k_means_elkan.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_k_means_minibatch.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_k_means_common.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_dbscan_inner.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_hierarchical_fast.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_hdbscan/_linkage.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_hdbscan/_reachability.cpython-311-x86_64-linux-gnu.so",
+        "sklearn/cluster/_hdbscan/_tree.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "25fc636bdaf1cc2f4a124a116312d837148b5e10872147bdaf4887926b8c03d8"
+    },
+    {
+      "bytes": 37634077,
+      "filename": "scipy-1.15.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "scipy/linalg/_linalg_pythran.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_cythonized_array_utils.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_decomp_update.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_solve_toeplitz.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_fblas.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_matfuncs_expm.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_decomp_interpolative.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/cython_blas.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_decomp_lu_cython.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_matfuncs_sqrtm_triu.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/_flapack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/linalg/cython_lapack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_dop.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_odepack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_vode.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_test_multivariate.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_quadpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_lsoda.cpython-311-x86_64-linux-gnu.so",
+        "scipy/integrate/_test_odeint_banded.cpython-311-x86_64-linux-gnu.so",
+        "scipy/ndimage/_cytest.cpython-311-x86_64-linux-gnu.so",
+        "scipy/ndimage/_ni_label.cpython-311-x86_64-linux-gnu.so",
+        "scipy/ndimage/_nd_image.cpython-311-x86_64-linux-gnu.so",
+        "scipy/ndimage/_rank_filter_1d.cpython-311-x86_64-linux-gnu.so",
+        "scipy/ndimage/_ctest.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_test_deprecation_def.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/messagestream.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_ccallback_c.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_test_deprecation_call.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_test_ccallback.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_fpumode.cpython-311-x86_64-linux-gnu.so",
+        "scipy/_lib/_uarray/_uarray.cpython-311-x86_64-linux-gnu.so",
+        "scipy/fftpack/convolve.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_stats.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_qmc_cy.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_stats_pythran.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_sobol.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_biasedurn.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_mvn.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_ansari_swilk_statistics.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_unuran/unuran_wrapper.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_rcont/rcont.cpython-311-x86_64-linux-gnu.so",
+        "scipy/stats/_levy_stable/levyst.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_cobyla.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_cython_nnls.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_group_columns.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_pava_pybind.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_lbfgsb.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_lsap.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_slsqp.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_moduleTNC.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_minpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_direct.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_bglu_dense.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_zeros.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_lsq/givens_elimination.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_trlib/_trlib.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/cython_optimize/_zeros.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_highspy/_highs_options.cpython-311-x86_64-linux-gnu.so",
+        "scipy/optimize/_highspy/_core.cpython-311-x86_64-linux-gnu.so",
+        "scipy/io/_test_fortran.cpython-311-x86_64-linux-gnu.so",
+        "scipy/io/matlab/_mio5_utils.cpython-311-x86_64-linux-gnu.so",
+        "scipy/io/matlab/_streams.cpython-311-x86_64-linux-gnu.so",
+        "scipy/io/matlab/_mio_utils.cpython-311-x86_64-linux-gnu.so",
+        "scipy/io/_fast_matrix_market/_fmm_core.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_peak_finding_utils.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_max_len_seq_inner.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_upfirdn_apply.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_sigtools.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_sosfilt.cpython-311-x86_64-linux-gnu.so",
+        "scipy/signal/_spline.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_rbfinterp_pythran.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_rgi_cython.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_fitpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_dfitpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_interpnd.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_bspl.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_dierckx.cpython-311-x86_64-linux-gnu.so",
+        "scipy/interpolate/_ppoly.cpython-311-x86_64-linux-gnu.so",
+        "scipy/cluster/_optimal_leaf_ordering.cpython-311-x86_64-linux-gnu.so",
+        "scipy/cluster/_hierarchy.cpython-311-x86_64-linux-gnu.so",
+        "scipy/cluster/_vq.cpython-311-x86_64-linux-gnu.so",
+        "scipy/fft/_pocketfft/pypocketfft.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_distance_pybind.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_distance_wrap.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_qhull.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_hausdorff.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_ckdtree.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/_voronoi.cpython-311-x86_64-linux-gnu.so",
+        "scipy/spatial/transform/_rotation.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/_sparsetools.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/_csparsetools.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_propack/_spropack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_propack/_cpropack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_propack/_zpropack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_propack/_dpropack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_dsolve/_superlu.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/linalg/_eigen/arpack/_arpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_tools.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_traversal.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_shortest_path.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_reordering.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_min_spanning_tree.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_flow.cpython-311-x86_64-linux-gnu.so",
+        "scipy/sparse/csgraph/_matching.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_specfun.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_test_internal.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_special_ufuncs.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_ellip_harm_2.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_ufuncs.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_comb.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/cython_special.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/_gufuncs.cpython-311-x86_64-linux-gnu.so",
+        "scipy/special/libsf_error_state.so",
+        "scipy/special/_ufuncs_cxx.cpython-311-x86_64-linux-gnu.so",
+        "scipy/odr/__odrpack.cpython-311-x86_64-linux-gnu.so",
+        "scipy.libs/libscipy_openblas-68440149.so"
+      ],
+      "sha256": "28a0d2c2075946346e4408b211240764759e0fabaeb08d871639b5f3b1aca8a0"
+    },
+    {
+      "bytes": 1301464,
+      "filename": "sentencepiece-0.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "sentencepiece/_sentencepiece.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "e58b47f933aca74c6a60a79dcb21d5b9e47416256c795c2d58d55cec27f9551d"
+    },
+    {
+      "bytes": 1313646,
+      "filename": "soundfile-0.13.1-py2.py3-none-manylinux_2_28_x86_64.whl",
+      "native_members": [
+        "_soundfile_data/libsndfile_x86_64.so"
+      ],
+      "sha256": "03267c4e493315294834a0870f31dbb3b28a95561b80b134f0bd3cf2d5f0e618"
+    },
+    {
+      "bytes": 252471,
+      "filename": "soxr-0.5.0.post1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "soxr/soxr_ext.cpython-311-x86_64-linux-gnu.so"
+      ],
+      "sha256": "ca6903671808e0a6078b0d146bb7a2952b118dfba44008b2aa60f221938ba829"
+    },
+    {
+      "bytes": 18414,
+      "filename": "threadpoolctl-3.5.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "56c1e26c150397e58c4926da8eeee87533b1e32bef131bd4bf6a2f45f3185467"
+    },
+    {
+      "bytes": 3008868,
+      "filename": "tokenizers-0.21.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "native_members": [
+        "tokenizers/tokenizers.abi3.so"
+      ],
+      "sha256": "e84ca973b3a96894d1707e189c14a774b701596d579ffc7e69debfc036a61a04"
+    },
+    {
+      "bytes": 78540,
+      "filename": "tqdm-4.67.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2"
+    },
+    {
+      "bytes": 9669412,
+      "filename": "transformers-4.48.3-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "78697f990f5ef350c23b46bf86d5081ce96b49479ab180b2de7687267de8fd36"
+    },
+    {
+      "bytes": 37438,
+      "filename": "typing_extensions-4.12.2-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"
+    },
+    {
+      "bytes": 128369,
+      "filename": "urllib3-2.3.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df"
+    },
+    {
+      "bytes": 930684,
+      "filename": "uroman-1.3.1.1-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "394f965f7011fd56a84aca098a6c3b50082f365324f5d94c992852137918c8f5"
+    },
+    {
+      "bytes": 9630,
+      "filename": "zipp-3.21.0-py3-none-any.whl",
+      "native_members": [],
+      "sha256": "ac1bbe05fd2991f160ebce24ffbac5f6d11d83dc90891255885223d42b3cd931"
+    }
+  ]
+}

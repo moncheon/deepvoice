@@ -1,0 +1,32 @@
+{
+  "channel_profile_counts": {
+    "clean_mono": 7,
+    "clean_stereo": 7,
+    "clipped_asymmetric": 6,
+    "noisy_room": 6,
+    "telephone_g711_proxy": 6
+  },
+  "files": 32,
+  "fixture_only": true,
+  "format_version": 1,
+  "label_counts": {
+    "voice=0,music=0": 4,
+    "voice=0,music=1": 4,
+    "voice=0,music=None": 4,
+    "voice=1,music=0": 4,
+    "voice=1,music=1": 4,
+    "voice=1,music=None": 4,
+    "voice=None,music=0": 4,
+    "voice=None,music=1": 4
+  },
+  "manifest_sha256": "bea9535ef4f49b1a650cae72fd6b4b842c31b7bb125ea0c591287136eaa2609d",
+  "seed": 2608,
+  "split_counts": {
+    "dev": 8,
+    "holdout": 8,
+    "train": 16
+  },
+  "total_bytes": 12297104,
+  "total_duration_sec": 238.863125,
+  "warning": "Procedural smoke corpus; not evidence of real-world detector performance."
+}

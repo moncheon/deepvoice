@@ -1,0 +1,240 @@
+{
+  "format_version": 1,
+  "models": {
+    "audioldm2-music": {
+      "files": [
+        {
+          "bytes": 5435,
+          "path": "README.md",
+          "sha256": "3d0699096c0926c8044a0656c259229d1d39dc884a8e6fb518d27555764b1136"
+        },
+        {
+          "bytes": 541,
+          "path": "feature_extractor/preprocessor_config.json",
+          "sha256": "9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753"
+        },
+        {
+          "bytes": 902,
+          "path": "language_model/config.json",
+          "sha256": "dfd666349774232748f24a9fcc71c1cec577af0b9a1a18846cedbc37bbbf87bb"
+        },
+        {
+          "bytes": 497772432,
+          "path": "language_model/model.safetensors",
+          "sha256": "8c57787555e1feb378e69e676a9d4f384363150dee6eeef390c47c1a5a99525d"
+        },
+        {
+          "bytes": 805,
+          "path": "model_index.json",
+          "sha256": "b79d5e17a8ba73e1131c98daf52e9fab18f9dfa98648a13fbfe1ab79b5c0752e"
+        },
+        {
+          "bytes": 173,
+          "path": "projection_model/config.json",
+          "sha256": "78d94ba74ecacd622e206e6d751810c7bebd46a70632c318ae159056f100058a"
+        },
+        {
+          "bytes": 4737688,
+          "path": "projection_model/diffusion_pytorch_model.safetensors",
+          "sha256": "2d58536f307aec6d114f8017c0c0e46762a35bce76f418f8ff7cee0c68ebc8f8"
+        },
+        {
+          "bytes": 507,
+          "path": "scheduler/scheduler_config.json",
+          "sha256": "b6d79c593aa336438b0826c5c00273e3c773283f6df0f365d1e908a291ec5367"
+        },
+        {
+          "bytes": 801,
+          "path": "text_encoder/config.json",
+          "sha256": "8680493b8b6622bf44565aaa69c80a9da28be20577bba2ef14095c845fdb1d17"
+        },
+        {
+          "bytes": 776327432,
+          "path": "text_encoder/model.safetensors",
+          "sha256": "a4a47b4a637dd58e9edb7b64a06acf37328b7cc3eafb0b8a85df895cc9e45d09"
+        },
+        {
+          "bytes": 766,
+          "path": "text_encoder_2/config.json",
+          "sha256": "45c375b0b91e81ff41960cac9e9c7bef294ca637fee1e3c40a8c12001190a0fd"
+        },
+        {
+          "bytes": 1364951064,
+          "path": "text_encoder_2/model.safetensors",
+          "sha256": "c1d0c8f1c739db9343c12ea4b0e3f2c97a833b3c072c251e91d97b7326fefb4e"
+        },
+        {
+          "bytes": 456318,
+          "path": "tokenizer/merges.txt",
+          "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+        },
+        {
+          "bytes": 280,
+          "path": "tokenizer/special_tokens_map.json",
+          "sha256": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f"
+        },
+        {
+          "bytes": 2108774,
+          "path": "tokenizer/tokenizer.json",
+          "sha256": "dc239041d98de27ffc3975473a1a23e3db4c937b23c138c38bbc66588bd247e5"
+        },
+        {
+          "bytes": 494,
+          "path": "tokenizer/tokenizer_config.json",
+          "sha256": "41a59cba3ee32bd67c4822f8a4d715b980ac7050d82fa9161f7ed1ad40817dc5"
+        },
+        {
+          "bytes": 798293,
+          "path": "tokenizer/vocab.json",
+          "sha256": "ed19656ea1707df69134c4af35c8ceda2cc9860bf2c3495026153a133670ab5e"
+        },
+        {
+          "bytes": 2201,
+          "path": "tokenizer_2/special_tokens_map.json",
+          "sha256": "5c87151ef0f72a99d1f766a4c418bd2a1f90aaa30a8e22fe5eca9641daebb64f"
+        },
+        {
+          "bytes": 791656,
+          "path": "tokenizer_2/spiece.model",
+          "sha256": "d60acb128cf7b7f2536e8f38a5b18a05535c9e14c7a355904270e15b0945ea86"
+        },
+        {
+          "bytes": 2422164,
+          "path": "tokenizer_2/tokenizer.json",
+          "sha256": "d7af4599a1914d04aaf44839418757f40ccca4c78033edeba369484978378335"
+        },
+        {
+          "bytes": 2349,
+          "path": "tokenizer_2/tokenizer_config.json",
+          "sha256": "a02a72019d4f2b43d4f3b438c653051f846ceab9fa71d8dbaa04aed12c62cd56"
+        },
+        {
+          "bytes": 1514,
+          "path": "unet/config.json",
+          "sha256": "c5fbbbbe20b03c44e59c43176f806a28ff16c0c199f142fafb2173a50d09a23d"
+        },
+        {
+          "bytes": 1387964784,
+          "path": "unet/diffusion_pytorch_model.safetensors",
+          "sha256": "c7c710e8f17631b6b04dd7d987a906a4ed26f7a699f7a50c11e90910958b081a"
+        },
+        {
+          "bytes": 559,
+          "path": "vae/config.json",
+          "sha256": "260633c192a61d95d6d6b61ccf34ffe28957a5cee87ccf1db5bdc07ea0f50f70"
+        },
+        {
+          "bytes": 221530308,
+          "path": "vae/diffusion_pytorch_model.safetensors",
+          "sha256": "5f8ddddc5c45eddaab38a67a434e8a64486964540ba3fc248a0da7cbd599d4ad"
+        },
+        {
+          "bytes": 654,
+          "path": "vocoder/config.json",
+          "sha256": "fbee5b8848af276ca526792091fa7bd7ce68941343be9accd6ca77013215c738"
+        },
+        {
+          "bytes": 221079092,
+          "path": "vocoder/model.safetensors",
+          "sha256": "d9dc6513c30a5b86c2497712690c04fe74b4aa79fdab6d490b34fcb4e24c590c"
+        }
+      ],
+      "license_id": "CC-BY-NC-SA-4.0",
+      "license_url": "https://huggingface.co/cvssp/audioldm2-music/blob/0019cb0bd4d314accff72aee1c3abd6f22929ba5/README.md",
+      "repo_id": "cvssp/audioldm2-music",
+      "revision": "0019cb0bd4d314accff72aee1c3abd6f22929ba5"
+    },
+    "mms-tts-kor": {
+      "files": [
+        {
+          "bytes": 4122,
+          "path": "README.md",
+          "sha256": "fb6b9fa6640760864fce3756d63647511ddadff7685c84f28b8fd9e593bf67e4"
+        },
+        {
+          "bytes": 1641,
+          "path": "config.json",
+          "sha256": "a5ac0adaa4610d1cd541a13c7f16d489e3b334046bc97b18668461ecdd764c88"
+        },
+        {
+          "bytes": 145217528,
+          "path": "model.safetensors",
+          "sha256": "915e6a5fd42f2641280f38a40b97ff8e6647bacfa043d8608ed0a5df9b70bec6"
+        },
+        {
+          "bytes": 47,
+          "path": "special_tokens_map.json",
+          "sha256": "97189e88379df5f0d02b0d445aafb3cc8e841a85193aec2e789f6fc99229e575"
+        },
+        {
+          "bytes": 286,
+          "path": "tokenizer_config.json",
+          "sha256": "58159e9986d3fb1af0e6998de488a37a89fd330bd4426056ce37bbc5b55c2f6e"
+        },
+        {
+          "bytes": 268,
+          "path": "vocab.json",
+          "sha256": "a461432d188b5f4b2246db4a795fb4561b547a3d4494f5881d8b207112ae113e"
+        }
+      ],
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://huggingface.co/facebook/mms-tts-kor/blob/1b6491366d2ed6ea8e4e735607155d9f0110df29/README.md",
+      "repo_id": "facebook/mms-tts-kor",
+      "revision": "1b6491366d2ed6ea8e4e735607155d9f0110df29"
+    },
+    "musicgen-small": {
+      "files": [
+        {
+          "bytes": 12309,
+          "path": "README.md",
+          "sha256": "fd82bcd1695c15550d5a047b911980038fc776f3bf417450c4596c6486d0cd2d"
+        },
+        {
+          "bytes": 7866,
+          "path": "config.json",
+          "sha256": "36bba569a817511fa54ddd1c42b157c24c8f6a178b7b85484d7475e71ce30f6d"
+        },
+        {
+          "bytes": 224,
+          "path": "generation_config.json",
+          "sha256": "3126e10627aad71cce75772137b1043bae6a066751f0aaebf7a1ba440a5fc3c4"
+        },
+        {
+          "bytes": 2364427288,
+          "path": "model.safetensors",
+          "sha256": "1bdc99d43eb6c775967df24b65b0a9f847c0907e95664698d93b5a1c35f5090d"
+        },
+        {
+          "bytes": 275,
+          "path": "preprocessor_config.json",
+          "sha256": "3f820c9214aed413cde1d72fe2bed2f5ce5e5929d4ac2cc12bfddaf0ba0b8465"
+        },
+        {
+          "bytes": 2201,
+          "path": "special_tokens_map.json",
+          "sha256": "5c87151ef0f72a99d1f766a4c418bd2a1f90aaa30a8e22fe5eca9641daebb64f"
+        },
+        {
+          "bytes": 791656,
+          "path": "spiece.model",
+          "sha256": "d60acb128cf7b7f2536e8f38a5b18a05535c9e14c7a355904270e15b0945ea86"
+        },
+        {
+          "bytes": 2422095,
+          "path": "tokenizer.json",
+          "sha256": "5f0ed8ab5b8cfa9812bb73752f1d80c292e52bcf5a87a144dc9ab2d251056cbb"
+        },
+        {
+          "bytes": 2366,
+          "path": "tokenizer_config.json",
+          "sha256": "88922cb67999604f60f3176db748b20975efc9ea7f72d5c80211be02d93c3b92"
+        }
+      ],
+      "license_id": "CC-BY-NC-4.0",
+      "license_url": "https://huggingface.co/facebook/musicgen-small/blob/4c8334b02c6ec4e8664a91979669a501ec497792/README.md",
+      "repo_id": "facebook/musicgen-small",
+      "revision": "4c8334b02c6ec4e8664a91979669a501ec497792"
+    }
+  },
+  "status": "reviewed"
+}

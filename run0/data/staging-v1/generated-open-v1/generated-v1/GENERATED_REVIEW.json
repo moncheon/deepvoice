@@ -1,0 +1,15 @@
+{
+  "format_version": 1,
+  "generator_split_counts": {
+    "music:AudioLDM2:holdout": 64,
+    "music:MusicGen:dev": 38,
+    "music:MusicGen:train": 218,
+    "voice:MMS-TTS-KOR:train": 1000
+  },
+  "manifest_sha256": "24c127d08c5fce2d00ddf9cdd79706837e40d026ec8797f2b56631ebe8eb2504",
+  "model_review_sha256": "d758e0b4804baeddd7e7704d6f107b04ced36623132a902698435eea4b803d5b",
+  "records": 1320,
+  "status": "reviewed",
+  "total_audio_bytes": 355254496,
+  "wheel_review_sha256": "bb7cbb08aa3857b0a3bb3ec134933a4ad809c447ad475a9bc03a33146c277448"
+}

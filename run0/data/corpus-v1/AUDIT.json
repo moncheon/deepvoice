@@ -1,0 +1,23 @@
+{
+  "failures": 0,
+  "files": 24000,
+  "format_version": 1,
+  "hash_list_sha256": "68b8431858c5c243ad92e3e891ae0320fb43e150f23961517efedc3bcadc3a1c",
+  "label_counts": {
+    "v0_m0": 3000,
+    "v0_m1": 3000,
+    "v0_mx": 3000,
+    "v1_m0": 3000,
+    "v1_m1": 3000,
+    "v1_mx": 3000,
+    "vx_m0": 3000,
+    "vx_m1": 3000
+  },
+  "manifest_sha256": "37372ad3f6dc5e37494960a309808fef3a413b10928f94143034de0ddb5c1423",
+  "parent_source_split_keys": 8764,
+  "split_counts": {
+    "dev": 3600,
+    "holdout": 3600,
+    "train": 16800
+  }
+}

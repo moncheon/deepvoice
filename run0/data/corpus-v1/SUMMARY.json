@@ -1,0 +1,32 @@
+{
+  "files": 24000,
+  "fixture_only": false,
+  "format_version": 2,
+  "label_counts": {
+    "v0_m0": 3000,
+    "v0_m1": 3000,
+    "v0_mx": 3000,
+    "v1_m0": 3000,
+    "v1_m1": 3000,
+    "v1_mx": 3000,
+    "vx_m0": 3000,
+    "vx_m1": 3000
+  },
+  "manifest_sha256": "37372ad3f6dc5e37494960a309808fef3a413b10928f94143034de0ddb5c1423",
+  "seed": 2608,
+  "source_crop_cache_limits_bytes": {
+    "music": 1610612736,
+    "voice": 536870912
+  },
+  "source_files": 11771,
+  "source_use_max": 95,
+  "source_use_min": 1,
+  "split_counts": {
+    "dev": 3600,
+    "holdout": 3600,
+    "train": 16800
+  },
+  "total_bytes": 9277968170,
+  "total_duration_sec": 181193.5904375,
+  "unique_sources_used": 8764
+}
