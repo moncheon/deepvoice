@@ -18,15 +18,22 @@ segment_chunk_size = 4
 [training]
 seed = 2608
 batch_size = 2
-gradient_accumulation_steps = 2
-max_segments_per_file = 8
+effective_batch_size = 8
+auto_batch_candidates = [8, 4, 2]
+auto_batch_memory_gate_gib = 70
+max_segments_per_file = 6
 epochs = 10
+min_epochs = 4
+early_stopping_patience = 2
 learning_rate = 0.0001
+backbone_learning_rate = 0.00002
 weight_decay = 0.01
+warmup_ratio = 0.05
 rank_loss_weight = 0.25
-consistency_loss_weight = 0.10
-domain_loss_weight = 0.05
-num_workers = 0
+consistency_loss_weight = 0.0
+domain_loss_weight = 0.0
+num_workers = 8
+evaluation_batch_size = 4
 
 [inference]
 batch_size = 1

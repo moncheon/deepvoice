@@ -10,8 +10,10 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 BASE_DIR = Path(__file__).resolve().parent
-if str(BASE_DIR) not in sys.path:
-    sys.path.insert(0, str(BASE_DIR))
+PACKAGE_DIR = BASE_DIR / "model"
+for import_root in (BASE_DIR, PACKAGE_DIR):
+    if str(import_root) not in sys.path:
+        sys.path.insert(0, str(import_root))
 
 from deepvoice_run0.constants import PREDICTION_COLUMNS
 from deepvoice_run0.inference import Predictor
@@ -31,7 +33,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--output", type=Path, default=Path("output/submission.csv"))
     parser.add_argument("--model-dir", type=Path, default=BASE_DIR / "model")
-    parser.add_argument("--config", type=Path, default=BASE_DIR / "config.toml")
+    default_config = (
+        BASE_DIR / "config.toml"
+        if (BASE_DIR / "config.toml").is_file()
+        else BASE_DIR / "model" / "config.toml"
+    )
+    parser.add_argument("--config", type=Path, default=default_config)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     parser.add_argument(
         "--fail-soft",

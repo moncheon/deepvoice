@@ -22,6 +22,12 @@ def parse_args() -> argparse.Namespace:
         help="Reviewed local backbone directory; overrides config.toml.",
     )
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--resume-weights", type=Path)
+    parser.add_argument(
+        "--wall-clock-seconds",
+        type=int,
+        help="Stop before starting a new epoch after this training duration.",
+    )
     parser.add_argument(
         "--acknowledge-licenses-reviewed",
         action="store_true",
@@ -52,6 +58,8 @@ def main() -> None:
         licenses_reviewed=args.acknowledge_licenses_reviewed,
         allow_fixture_training=args.allow_fixture_smoke_training,
         split_path=args.splits,
+        resume_weights=args.resume_weights,
+        wall_clock_seconds=args.wall_clock_seconds,
     )
     print(f"Saved tensor-only weights after {len(metadata['history'])} epoch(s): {args.output_dir}")
 

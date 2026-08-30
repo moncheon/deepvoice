@@ -91,6 +91,8 @@ SONICS의 full song은 challenge 보관용입니다. 보컬/반주 stem이 검�
 
 외부 checkpoint는 먼저 저장한 뒤 source, revision, license, hash를 검토하고 `run0/model/backbone/`에 복사합니다. 다운로드와 loader 실행을 한 명령으로 연결하지 않습니다.
 
+Run0 v1 backbone은 `microsoft/wavlm-base-plus` revision `4c66d4806a428f2e922ccfa1a962776e232d487b`로 고정했습니다. [backbone_source.json](backbone_source.json)은 원본 checkpoint를 실행하기 전에 확인한 파일 allowlist, SHA-256, CC BY-SA 3.0 라이선스 원문 revision을 기록합니다. GPU Job은 이 ledger와 private source snapshot이 정확히 일치한 뒤에만 원본을 열고 tensor-safe `model.safetensors`로 변환합니다.
+
 ## 제출 추론
 
 필수 artifact 계약은 [model/MODEL_README.md](model/MODEL_README.md)에 있습니다.
@@ -128,3 +130,5 @@ powershell -ExecutionPolicy Bypass -File run0/tools/build_baseline_control_submi
 ## Hugging Face 실행
 
 [hf_space/DEPLOY.md](hf_space/DEPLOY.md)는 private Docker Space와 일회성 HF Job 실행 절차입니다. private worker/corpus/model 저장소를 생성했고 Space commit `e4a885d3d06093c41f0e967a535f3a61b9d4e18b`의 build와 인증된 `/health`를 확인한 뒤 pause했습니다. 하드웨어 변경 권한이 없는 fine-grained token에서는 Space GPU API가 401이므로, 고정 digest의 PyTorch image와 private Space source를 read-only mount한 4시간 제한 Job을 사용했습니다. 완료 Job `6a93901e984507d9db4ec523`은 L40S에서 2,666초 실행됐고, wheel 구조/hash 검토 → 모델 safetensors/hash/license 검토 → 3-file CUDA smoke → 1,320개 생성 → private dataset upload를 순서대로 통과했습니다. 실제 L40S 비용은 약 $1.33이며, 앞선 검토 단계에서 차단된 41초 Job까지 포함하면 약 $1.35입니다.
+
+성능 학습 Job은 `train_job_entrypoint.sh`를 사용합니다. 8개 corpus shard와 WavLM source snapshot을 각각 private dataset/model volume에서 읽고 모든 해시를 재검증한 뒤 A100 auto-batch smoke, 최대 10 epoch 학습, epoch별 full dev 공식 점수 선택, best checkpoint의 holdout 평가를 수행합니다. 산출물은 먼저 private model repo의 `runs/<run-id>/`에만 업로드되며 성능·라이선스·해시 검토 후 root artifact로 승격합니다.

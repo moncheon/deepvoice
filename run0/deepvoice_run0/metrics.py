@@ -34,7 +34,8 @@ def roc_points(labels: Iterable[int], scores: Iterable[float]) -> tuple[np.ndarr
 
 def roc_auc(labels: Iterable[int], scores: Iterable[float]) -> float:
     fpr, tpr = roc_points(labels, scores)
-    return float(np.trapezoid(tpr, fpr))
+    integrate = getattr(np, "trapezoid", np.trapz)
+    return float(integrate(tpr, fpr))
 
 
 def equal_error_rate(labels: Iterable[int], scores: Iterable[float]) -> float:

@@ -140,10 +140,28 @@ if nn is not None:
             self.domain_head = nn.Linear(joint_size, num_domains) if num_domains > 1 else None
 
         def freeze_backbone_lower_half(self) -> None:
-            parameters = list(self.backbone.parameters())
-            boundary = len(parameters) // 2
-            for parameter in parameters[:boundary]:
-                parameter.requires_grad_(False)
+            """Freeze the feature encoder and lower transformer half structurally."""
+
+            for parameter in self.backbone.parameters():
+                parameter.requires_grad_(True)
+            feature_extractor = getattr(self.backbone, "feature_extractor", None)
+            if feature_extractor is not None:
+                for parameter in feature_extractor.parameters():
+                    parameter.requires_grad_(False)
+            feature_projection = getattr(self.backbone, "feature_projection", None)
+            if feature_projection is not None:
+                for parameter in feature_projection.parameters():
+                    parameter.requires_grad_(False)
+            encoder = getattr(self.backbone, "encoder", None)
+            layers = list(getattr(encoder, "layers", []))
+            if layers:
+                for layer in layers[: len(layers) // 2]:
+                    for parameter in layer.parameters():
+                        parameter.requires_grad_(False)
+            else:
+                parameters = list(self.backbone.parameters())
+                for parameter in parameters[: len(parameters) // 2]:
+                    parameter.requires_grad_(False)
 
         def _voice_encode(self, mid: torch.Tensor, valid_mask: torch.Tensor) -> torch.Tensor:
             output = self.backbone(input_values=mid, attention_mask=valid_mask.long())
