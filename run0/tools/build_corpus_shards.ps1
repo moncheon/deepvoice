@@ -47,5 +47,7 @@ $Payload = [ordered]@{
     corpus_manifest_sha256 = $ManifestHash
     shards = $Records
 }
-$Payload | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $OutputFull "SHARDS.json") -Encoding UTF8
+$Json = $Payload | ConvertTo-Json -Depth 5
+$Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText((Join-Path $OutputFull "SHARDS.json"), $Json + "`n", $Utf8NoBom)
 Write-Output "Created 8 reviewed corpus shards at $OutputFull"
