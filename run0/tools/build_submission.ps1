@@ -75,14 +75,17 @@ try {
     }
     Copy-Item -LiteralPath (Join-Path $ModelRoot "backbone") -Destination $StageModel.FullName -Recurse
     Copy-Item -LiteralPath (Join-Path $Run0Root "config.toml") -Destination $StageModel.FullName
-    Copy-Item -LiteralPath (Join-Path $Run0Root "deepvoice_run0") -Destination $StageModel.FullName -Recurse
-    Get-ChildItem -LiteralPath $StageFull -Recurse -Directory -Filter "__pycache__" |
-        Remove-Item -Recurse -Force
-    Get-ChildItem -LiteralPath $StageFull -Recurse -File -Include "*.pyc","*.pyo" |
-        Remove-Item -Force
+    $StagePackage = New-Item -ItemType Directory -Path (Join-Path $StageModel.FullName "deepvoice_run0")
+    Get-ChildItem -LiteralPath (Join-Path $Run0Root "deepvoice_run0") -File -Filter "*.py" |
+        Copy-Item -Destination $StagePackage.FullName
+
+    $StagedFiles = @(Get-ChildItem -LiteralPath $StageFull -Recurse -File)
+    if ($StagedFiles.Count -eq 0) {
+        throw "Submission staging unexpectedly contains no files"
+    }
 
     New-Item -ItemType Directory -Path (Split-Path $OutputFullPath -Parent) -Force | Out-Null
-    & python (Join-Path $PSScriptRoot "zip_submission.py") $StageFull $OutputFullPath
+    & python (Join-Path $PSScriptRoot "zip_submission.py") -- $StageFull $OutputFullPath
     if ($LASTEXITCODE -ne 0) {
         throw "Streaming Zip64 package creation failed with exit code $LASTEXITCODE"
     }
