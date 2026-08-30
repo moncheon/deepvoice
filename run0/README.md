@@ -117,6 +117,14 @@ powershell -ExecutionPolicy Bypass -File run0/tools/build_submission.ps1
 
 스크립트는 `script.py`, `config.toml`, `requirements.txt`, `deepvoice_run0/`, `model/`만 포함하며 weights/backbone이 없으면 실패합니다.
 
+Run0 학습 가중치가 생기기 전 리더보드 파이프라인 자체를 점검할 때는 제공 baseline을 control로 패키징합니다.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File run0/tools/build_baseline_control_submission.ps1
+```
+
+기본 출력은 `run0/build/submit-baseline-control.zip`입니다. 빌더는 포함된 세 checkpoint의 SHA-256을 먼저 검증하고, Zip64 store 방식으로 최상위 `model/`, `script.py`, `requirements.txt`만 생성한 뒤 10 GB/32 GB 제한과 경로 구조를 다시 검사합니다. 옆의 `submit-baseline-control.manifest.json`에는 최종 ZIP 해시와 검증 결과가 기록됩니다. 이 제출은 Run0 성능이 아니라 organizer baseline의 기준점만 측정합니다.
+
 ## Hugging Face 실행
 
 [hf_space/DEPLOY.md](hf_space/DEPLOY.md)는 private Docker Space와 일회성 HF Job 실행 절차입니다. private worker/corpus/model 저장소를 생성했고 Space commit `e4a885d3d06093c41f0e967a535f3a61b9d4e18b`의 build와 인증된 `/health`를 확인한 뒤 pause했습니다. 하드웨어 변경 권한이 없는 fine-grained token에서는 Space GPU API가 401이므로, 고정 digest의 PyTorch image와 private Space source를 read-only mount한 4시간 제한 Job을 사용했습니다. 완료 Job `6a93901e984507d9db4ec523`은 L40S에서 2,666초 실행됐고, wheel 구조/hash 검토 → 모델 safetensors/hash/license 검토 → 3-file CUDA smoke → 1,320개 생성 → private dataset upload를 순서대로 통과했습니다. 실제 L40S 비용은 약 $1.33이며, 앞선 검토 단계에서 차단된 41초 Job까지 포함하면 약 $1.35입니다.
