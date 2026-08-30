@@ -54,9 +54,10 @@ def prepare_corpus() -> dict[str, object]:
     shard_manifest = json.loads(shard_manifest_path.read_text(encoding="utf-8"))
     if shard_manifest.get("format_version") != 1:
         raise RuntimeError("unsupported shard manifest format")
+    corpus_source = DATASET_MOUNT / "corpus-v1"
     DATA_ROOT.mkdir(parents=True, exist_ok=False)
     for name in ("manifest.jsonl", "splits.json", "SUMMARY.json", "AUDIT.json"):
-        shutil.copy2(DATASET_MOUNT / name, DATA_ROOT / name)
+        shutil.copy2(corpus_source / name, DATA_ROOT / name)
     actual_manifest_hash = sha256_file(DATA_ROOT / "manifest.jsonl")
     if actual_manifest_hash != shard_manifest["corpus_manifest_sha256"]:
         raise RuntimeError("corpus manifest hash does not match shard manifest")
