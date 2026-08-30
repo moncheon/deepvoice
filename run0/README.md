@@ -193,3 +193,19 @@ python run0/tools/promote_training_run.py `
 
 이 값은 로컬 holdout 점수가 아니라 DACON의 실제 코드 제출 채점 결과입니다.
 반대로 공개 리더보드 점수만으로 private/final leaderboard 성능을 보장하지는 않습니다.
+
+### Baseline 대비 memo
+
+동일 리더보드 스냅샷에서 DACON.GM Baseline은 104위, Run0 v1은 144위였습니다.
+
+| 지표 | DACON.GM Baseline | Run0 v1 | Run0 차이 |
+| --- | ---: | ---: | ---: |
+| 총점 | `0.69091` | `0.6517645476` | `-0.0391454524` |
+| ADS | `0.65775` | `0.6183571429` | `-0.0393928571` |
+| CPS | `0.989323` | `0.9524311905` | `-0.0368918095` |
+
+공식 총점은 `0.9 * ADS + 0.1 * CPS`입니다. 상세 ADS/CPS 값으로 분해하면
+총점 격차의 약 90.6%가 ADS에서 발생합니다. CPS만 Baseline 수준으로 맞출 때의
+예상 총점은 `0.6554537286`인 반면, ADS만 맞추면 `0.6872181191`입니다.
+따라서 다음 라운드는 ADS의 unseen generator/codec 일반화를 우선하고, CPS는
+Baseline의 전용 presence branch를 Run0과 결합하는 hybrid를 먼저 검증합니다.
