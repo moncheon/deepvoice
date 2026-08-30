@@ -82,7 +82,10 @@ try {
         Remove-Item -Force
 
     New-Item -ItemType Directory -Path (Split-Path $OutputFullPath -Parent) -Force | Out-Null
-    Compress-Archive -Path (Join-Path $StageFull "*") -DestinationPath $OutputFullPath -CompressionLevel Optimal
+    & python (Join-Path $PSScriptRoot "zip_submission.py") $StageFull $OutputFullPath
+    if ($LASTEXITCODE -ne 0) {
+        throw "Streaming Zip64 package creation failed with exit code $LASTEXITCODE"
+    }
 
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $Archive = [System.IO.Compression.ZipFile]::OpenRead($OutputFullPath)

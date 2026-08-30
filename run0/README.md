@@ -139,6 +139,9 @@ powershell -ExecutionPolicy Bypass -File run0/tools/build_submission.ps1
 ```
 
 스크립트는 최상위에 `script.py`, `requirements.txt`, `model/`만 두며, 설정과 Python 패키지는 `model/` 안에 넣습니다. 성능·분산·라이선스 gate를 통과한 weights/backbone이 없으면 실패합니다.
+대형 safetensors를 메모리에 모으지 않도록 low-memory Zip64 store writer로 파일을
+하나씩 추가합니다. 최종 ZIP의 루트 구조·10GB/32GB 제한·SHA-256은 별도로 다시
+검증합니다.
 
 Run0 학습 가중치가 생기기 전 리더보드 파이프라인 자체를 점검할 때는 제공 baseline을 control로 패키징합니다.
 
