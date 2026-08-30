@@ -1,0 +1,3 @@
+# Organizer baseline checkpoint exceeds GitHub's per-file LFS limit.
+# Keep the reviewed local copy; publish its checksum/provenance instead.
+/format/baseline_submit/model/df_arena_1b/pytorch_model.bin
