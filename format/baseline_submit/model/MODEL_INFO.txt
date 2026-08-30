@@ -10,3 +10,6 @@ HTDemucs
 PANNs Cnn14
 - Checkpoint: Cnn14_mAP=0.431.pth
 - Local directory: panns
+
+Remote storage
+- Private Hugging Face mirror and restore instructions: HF_STORAGE.md
