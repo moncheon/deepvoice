@@ -4,6 +4,7 @@ set -euo pipefail
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONUNBUFFERED=1
 export HF_HUB_DISABLE_TELEMETRY=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 workspace=/workspace
 wheelhouse=/tmp/run0-benchmark-wheelhouse
 review=/tmp/run0-benchmark-wheel-review.json

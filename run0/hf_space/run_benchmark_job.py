@@ -28,6 +28,7 @@ DATASET_MOUNT = Path(os.environ.get("RUN0_DATASET_MOUNT", "/dataset"))
 MODEL_MOUNT = Path(os.environ.get("RUN0_MODEL_MOUNT", "/model-final"))
 MODEL_PATH = MODEL_MOUNT / os.environ.get("RUN0_FINAL_MODEL_RELATIVE", "final/run0-v1")
 OUTPUT = Path("/tmp/run0-l4-benchmark")
+CORPUS_METADATA = DATASET_MOUNT / "corpus-v1"
 
 
 def sha256_file(path: Path) -> str:
@@ -39,9 +40,9 @@ def sha256_file(path: Path) -> str:
 
 
 def select_records(limit: int = 100) -> list[dict[str, object]]:
-    splits = json.loads((DATASET_MOUNT / "splits.json").read_text(encoding="utf-8"))
+    splits = json.loads((CORPUS_METADATA / "splits.json").read_text(encoding="utf-8"))
     groups: dict[tuple[object, ...], list[dict[str, object]]] = defaultdict(list)
-    with (DATASET_MOUNT / "manifest.jsonl").open("r", encoding="utf-8") as handle:
+    with (CORPUS_METADATA / "manifest.jsonl").open("r", encoding="utf-8") as handle:
         for line in handle:
             record = json.loads(line)
             if splits[record["sample_id"]] != "holdout":
@@ -108,15 +109,27 @@ def labels_and_metrics(records: list[dict[str, object]], scores: np.ndarray) -> 
     )
 
 
-def run_submission_smoke() -> dict[str, object]:
+def run_submission_smoke(max_segments: int) -> dict[str, object]:
     output_csv = OUTPUT / "sample-submission.csv"
+    smoke_config = OUTPUT / "config.toml"
+    source_config = (WORKSPACE / "config.toml").read_text(encoding="utf-8")
+    replacements = {
+        "max_segments = 16": f"max_segments = {max_segments}",
+        "uniform_segments = 12": f"uniform_segments = {max(1, max_segments - 4)}",
+        "novelty_segments = 4": f"novelty_segments = {min(4, max_segments - 1)}",
+    }
+    for original, replacement in replacements.items():
+        if source_config.count(original) != 1:
+            raise RuntimeError(f"benchmark config contract changed: {original}")
+        source_config = source_config.replace(original, replacement)
+    smoke_config.write_text(source_config, encoding="utf-8")
     command = [
         sys.executable, str(WORKSPACE / "script.py"),
         "--test-dir", str(WORKSPACE / "sample" / "test"),
         "--sample-submission", str(WORKSPACE / "sample" / "sample_submission.csv"),
         "--output", str(output_csv),
         "--model-dir", str(MODEL_PATH),
-        "--config", str(WORKSPACE / "config.toml"),
+        "--config", str(smoke_config),
         "--device", "cuda",
     ]
     result = subprocess.run(command, capture_output=True, text=True, check=False)
@@ -129,6 +142,7 @@ def run_submission_smoke() -> dict[str, object]:
         validate_prediction(float(row[name]) for name in PREDICTION_COLUMNS)
     return {
         "rows": len(rows),
+        "max_segments": max_segments,
         "stdout": result.stdout[-500:],
         "output_sha256": sha256_file(output_csv),
     }
@@ -178,7 +192,7 @@ def main() -> None:
             selected_segments = segments
     if selected_segments is None:
         raise RuntimeError("no segment count passed runtime, VRAM, and score gates")
-    smoke = run_submission_smoke()
+    smoke = run_submission_smoke(selected_segments)
     report = {
         "format_version": 1,
         "gpu": torch.cuda.get_device_name(0),
