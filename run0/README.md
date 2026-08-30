@@ -175,3 +175,21 @@ python run0/tools/promote_training_run.py `
   --run-id <run-id> `
   --source-commit <40-character-source-commit>
 ```
+
+## DACON Run0 v1 실측 결과
+
+2026-08-30 20:47 KST 기준으로 GPU 학습 Run0 v1을 DACON 대회
+`236749`에 제출하고 채점 및 공개 리더보드 반영을 확인했습니다.
+
+- submission ID: `76229`
+- 제출 파일: `submit-run0-v1-67255dc.zip`
+- 제출 ZIP SHA-256: `18144818efbed1753ac094f9df912f972bd266b64731ea8511fa5554e7d9370e`
+- 제출 시각: `2026-08-30 20:45:13 KST`
+- 총점: `0.6517645476`
+- ADS: `0.6183571429`
+- CPS: `0.9524311905`
+- DACON 실행 시간: `1분 46초`
+- 공개 리더보드: 팀 `데봅`, `144위`, 표시 총점 `0.65176`
+
+이 값은 로컬 holdout 점수가 아니라 DACON의 실제 코드 제출 채점 결과입니다.
+반대로 공개 리더보드 점수만으로 private/final leaderboard 성능을 보장하지는 않습니다.
