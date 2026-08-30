@@ -17,6 +17,9 @@ class TrainingEvidenceTests(unittest.TestCase):
         training = config["training"]
         self.assertEqual(training["auto_batch_candidates"], [2])
         self.assertEqual(training["effective_batch_size"], 8)
+        self.assertEqual(training["max_segments_per_file"], 4)
+        self.assertEqual(training["samples_per_epoch"], 4800)
+        self.assertFalse(training["gradient_checkpointing"])
         self.assertGreaterEqual(training["min_epochs"], 4)
         self.assertEqual(training["consistency_loss_weight"], 0.0)
         self.assertEqual(training["domain_loss_weight"], 0.0)

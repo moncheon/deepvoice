@@ -49,6 +49,7 @@ def _loader(
     num_workers: int,
     training: bool,
     loader_types: tuple[Any, Any],
+    samples_per_epoch: int | None = None,
 ) -> Any:
     DataLoader, WeightedRandomSampler = loader_types
     dataset = ManifestDataset(records, manifest_dir, audio_settings)
@@ -63,8 +64,11 @@ def _loader(
         options.update(persistent_workers=True, prefetch_factor=2)
     if training:
         weights = inverse_group_weights(records)
+        sample_count = len(weights) if samples_per_epoch is None else min(
+            len(weights), max(1, int(samples_per_epoch))
+        )
         options["sampler"] = WeightedRandomSampler(
-            weights.tolist(), len(weights), replacement=True
+            weights.tolist(), sample_count, replacement=True
         )
     else:
         options["shuffle"] = False
@@ -77,7 +81,7 @@ def _loss(
     *,
     device: str,
     training: dict[str, object],
-) -> tuple[dict[str, Any], dict[str, Any]]:
+) -> dict[str, Any]:
     outputs = model(
         batch["audio"].to(device, non_blocking=True),
         batch["valid_mask"].to(device, non_blocking=True),
@@ -94,7 +98,7 @@ def _loss(
         consistency_weight=float(training.get("consistency_loss_weight", 0.0)),
         domain_weight=float(training.get("domain_loss_weight", 0.0)),
     )
-    return outputs, losses
+    return losses
 
 
 def _choose_batch_size(
@@ -123,14 +127,13 @@ def _choose_batch_size(
         print(json.dumps({"event": "auto_batch_start", "batch_size": candidate}), flush=True)
         dataset = ManifestDataset(ordered[:candidate], manifest_dir, audio_settings)
         batch = collate_records([dataset[index] for index in range(len(dataset))])
-        outputs = None
         losses = None
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
         model.zero_grad(set_to_none=True)
         try:
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                outputs, losses = _loss(model, batch, device=device, training=training)
+                losses = _loss(model, batch, device=device, training=training)
             losses["total"].backward()
             peak = int(torch.cuda.max_memory_allocated())
             if peak <= memory_gate_bytes:
@@ -152,7 +155,7 @@ def _choose_batch_size(
             }, sort_keys=True), flush=True)
         finally:
             model.zero_grad(set_to_none=True)
-            del outputs, losses, batch, dataset
+            del losses, batch, dataset
             gc.collect()
             torch.cuda.empty_cache()
     detail = f"; last CUDA error: {last_error_message}" if last_error_message else ""
@@ -345,7 +348,9 @@ def train(
         segment_chunk_size=int(model_settings.get("segment_chunk_size", 4)),
     ).to(device)
     model.freeze_backbone_lower_half()
-    if hasattr(model.backbone, "gradient_checkpointing_enable"):
+    if bool(training.get("gradient_checkpointing", False)) and hasattr(
+        model.backbone, "gradient_checkpointing_enable"
+    ):
         model.backbone.gradient_checkpointing_enable()
     if resume_weights is not None:
         missing, unexpected = model.load_state_dict(
@@ -373,6 +378,7 @@ def train(
         by_split["train"], manifest_dir=manifest.parent, audio_settings=audio_settings,
         batch_size=batch_size, num_workers=num_workers, training=True,
         loader_types=loader_types,
+        samples_per_epoch=int(training.get("samples_per_epoch", len(by_split["train"]))),
     )
     evaluation_batch = max(1, min(batch_size, int(training.get("evaluation_batch_size", 4))))
     dev_loader = _loader(
@@ -439,7 +445,7 @@ def train(
                 dtype=torch.bfloat16,
                 enabled=torch.device(device).type == "cuda",
             ):
-                _, losses = _loss(model, batch, device=device, training=training)
+                losses = _loss(model, batch, device=device, training=training)
             (losses["total"] / accumulation_steps).backward()
             should_step = (step + 1) % accumulation_steps == 0 or step + 1 == len(train_loader)
             if should_step:
@@ -448,6 +454,17 @@ def train(
                 scheduler.step()
                 optimizer.zero_grad(set_to_none=True)
             totals.append(float(losses["total"].detach().cpu()))
+            if torch.device(device).type == "cuda" and (
+                step < 5 or (step + 1) % 200 == 0
+            ):
+                print(json.dumps({
+                    "event": "train_step_memory",
+                    "epoch": epoch + 1,
+                    "step": step + 1,
+                    "allocated_vram_bytes": int(torch.cuda.memory_allocated()),
+                    "reserved_vram_bytes": int(torch.cuda.memory_reserved()),
+                }, sort_keys=True), flush=True)
+            del losses, batch
         save_file(_state_dict(model), str(last_path))
         dev_metrics, dev_scores, dev_ids = evaluate_model(model, dev_loader, device=device)
         epoch_record: dict[str, object] = {
