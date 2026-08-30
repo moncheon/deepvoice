@@ -85,3 +85,15 @@ downloaded and recorded in `MODEL_REVIEW.json` before import. A 1+1+1 model
 smoke must pass before the bounded production batch. The Job uploads only to an
 already-created private dataset repository and terminates automatically on
 success, failure, or timeout.
+
+For the production detector run, keep the original generator-holdout split as a
+diagnostic and select the reviewed domain-covered ledger explicitly:
+
+```powershell
+-e RUN0_SPLIT_RELATIVE=splits/domain-balanced-v1.json
+```
+
+The same variable must be passed to the L4 benchmark Job so its 100-file
+quality/runtime sample is drawn from the evaluated holdout rather than from a
+different ledger. Both training and benchmark reports record the relative path
+and SHA-256 of the selected split.

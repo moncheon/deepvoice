@@ -22,7 +22,13 @@
 
 ## 아직 증명되지 않은 범위
 
-검토된 실제 corpus와 생성 오디오 구축은 완료했지만, 아직 학습된 `run0.safetensors`의 LOGO/worst-group 점수는 없습니다. 따라서 생성·데이터 파이프라인 통과를 detector 성능·L4 처리시간·VRAM 기준 통과로 해석하지 않습니다. 실제 채택은 `pre-plan/1-strategy.md`의 독립 gate를 통과해야 합니다.
+첫 A100 완주 run은 엄격한 미관측-generator holdout에서 weighted score 0.5161,
+voice-fake EER 0.7698로 내부 gate를 통과하지 못했습니다. 이 checkpoint는 private
+`runs/` 증거로만 보존하고 승격·제출하지 않습니다. 이는 소스 분리 진단 결과이지
+리더보드 성능은 아닙니다. 다음 production run은 speaker/content/parent group 원자성을
+유지하면서 MLAAD·MMS·MusicGen·AudioLDM2의 coarse domain을 train/dev/holdout 모두에
+포함하는 별도 split을 사용합니다. 그 run도 holdout gate와 L4 benchmark를 통과하기
+전에는 제출 가능한 성능으로 간주하지 않습니다.
 
 ## 로컬 검증
 
@@ -85,6 +91,21 @@ python run0/train.py --manifest run0/data/corpus-v1/manifest.jsonl --splits run0
 - hash audit: 24,000개 실패 0, parent source 8,764개 split 누수 0
 - private dataset: `datahj/deepvoice-run0-corpus-v1` revision `4fbc8bef72d8a0b0d3d9767ded5b9f80b2938d0c`
 
+원래 `corpus-v1/splits.json`은 MMS-TTS-KOR와 AudioLDM2를 완전히 감춘
+generator-holdout 진단용입니다. production 후보는 다음 명령으로 별도 생성합니다.
+두 split을 같은 이름으로 덮어쓰지 않습니다.
+
+```powershell
+python run0/tools/manifest_cli.py split run0/data/corpus-v1/manifest.jsonl `
+  --output run0/build/domain-balanced-splits-v1/splits.json `
+  --summary run0/build/domain-balanced-splits-v1/SUMMARY.json `
+  --seed 2609 --train-ratio 0.7 --dev-ratio 0.15 --stratify-domains
+```
+
+현재 생성 결과는 train 16,761 / dev 3,551 / holdout 3,688, split-group 누수 0이며,
+세 split 모두 MLAAD·MMS·MusicGen·AudioLDM2 표본을 포함합니다. assignment SHA-256은
+`e7a0d6caec337007f1f5a752dda0eefa66eb135417fe88523e9d44acb79c97d7`입니다.
+
 `--duration 6`은 component crop 길이입니다. 동시 혼합은 약 6초이고, 순차 혼합은 두 component와 최대 0.4초 gap을 이어 붙여 약 12초가 됩니다.
 
 SONICS의 full song은 challenge 보관용입니다. 보컬/반주 stem이 검토되기 전에는 music-only source로 가져오지 않아 presence label 오염을 막습니다. 실제 음악은 FMA의 `Vocal content: none`과 적응 가능한 per-track Creative Commons attribution이 동시에 확인된 행만 사용합니다.
@@ -132,6 +153,10 @@ powershell -ExecutionPolicy Bypass -File run0/tools/build_baseline_control_submi
 [hf_space/DEPLOY.md](hf_space/DEPLOY.md)는 private Docker Space와 일회성 HF Job 실행 절차입니다. private worker/corpus/model 저장소를 생성했고 Space commit `e4a885d3d06093c41f0e967a535f3a61b9d4e18b`의 build와 인증된 `/health`를 확인한 뒤 pause했습니다. 하드웨어 변경 권한이 없는 fine-grained token에서는 Space GPU API가 401이므로, 고정 digest의 PyTorch image와 private Space source를 read-only mount한 4시간 제한 Job을 사용했습니다. 완료 Job `6a93901e984507d9db4ec523`은 L40S에서 2,666초 실행됐고, wheel 구조/hash 검토 → 모델 safetensors/hash/license 검토 → 3-file CUDA smoke → 1,320개 생성 → private dataset upload를 순서대로 통과했습니다. 실제 L40S 비용은 약 $1.33이며, 앞선 검토 단계에서 차단된 41초 Job까지 포함하면 약 $1.35입니다.
 
 성능 학습 Job은 `train_job_entrypoint.sh`를 사용합니다. 8개 corpus shard와 WavLM source snapshot을 각각 private dataset/model volume에서 읽고 모든 해시를 재검증한 뒤 A100 batch-2 smoke, 유효 batch 8, epoch당 4,800개 가중표본, 최대 10 epoch 학습을 수행합니다. 매 epoch full dev 공식 점수로 best checkpoint를 선택하고, 선택이 끝난 뒤 holdout을 한 번만 평가합니다. PyTorch 2.6.0 CUDA 12.4 공식 이미지는 digest `sha256:77f17f843507062875ce8be2a6f76aa6aa3df7f9ef1e31d9d7432f4b0f563dee`로 고정합니다.
+
+production split은 Job 환경변수 `RUN0_SPLIT_RELATIVE=splits/domain-balanced-v1.json`으로
+명시합니다. 학습 sampler도 exact generator 모델명별 역빈도 대신 label + coarse
+generator domain별 역빈도를 사용하여 희귀 모델명 하나가 epoch을 과점하지 않게 합니다.
 
 산출물은 먼저 private model repo의 `runs/<run-id>/`에만 업로드됩니다. 아래 도구는 immutable repository revision에서 파일을 내려받아 `ARTIFACTS.json`의 크기와 SHA-256, 성능 gate, run/source provenance를 확인한 뒤에만 로컬 `model/`과 private `final/run0-v1/`로 승격합니다.
 

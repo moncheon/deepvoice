@@ -14,6 +14,7 @@ import tarfile
 import time
 from collections import defaultdict
 from pathlib import Path
+from pathlib import PurePosixPath
 
 import numpy as np
 
@@ -31,6 +32,13 @@ OUTPUT = Path("/tmp/run0-l4-benchmark")
 CORPUS_METADATA = DATASET_MOUNT / "corpus-v1"
 
 
+def split_path() -> Path:
+    relative = PurePosixPath(os.environ.get("RUN0_SPLIT_RELATIVE", "corpus-v1/splits.json"))
+    if relative.is_absolute() or not relative.parts or ".." in relative.parts:
+        raise RuntimeError(f"unsafe dataset-relative split path: {relative}")
+    return DATASET_MOUNT / Path(*relative.parts)
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -40,7 +48,7 @@ def sha256_file(path: Path) -> str:
 
 
 def select_records(limit: int = 100) -> list[dict[str, object]]:
-    splits = json.loads((CORPUS_METADATA / "splits.json").read_text(encoding="utf-8"))
+    splits = json.loads(split_path().read_text(encoding="utf-8"))
     groups: dict[tuple[object, ...], list[dict[str, object]]] = defaultdict(list)
     with (CORPUS_METADATA / "manifest.jsonl").open("r", encoding="utf-8") as handle:
         for line in handle:
@@ -201,6 +209,8 @@ def main() -> None:
         "results": results,
         "submission_smoke": smoke,
         "model_artifacts_sha256": sha256_file(MODEL_PATH / "ARTIFACTS.json"),
+        "split_relative": split_path().relative_to(DATASET_MOUNT).as_posix(),
+        "split_sha256": sha256_file(split_path()),
     }
     report_path = OUTPUT / "L4_BENCHMARK.json"
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

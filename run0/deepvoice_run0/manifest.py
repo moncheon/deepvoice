@@ -212,3 +212,81 @@ def assign_stratified_group_splits(
             for record in grouped[group]:
                 assignments[record.sample_id] = split_by_group[group]
     return assignments
+
+
+def coarse_generator_domain(record: ManifestRecord) -> tuple[str, str]:
+    """Return stable voice/music generator classes without model memorization.
+
+    A mixed record may contain multiple generator-family tokens.  The coarse
+    classes deliberately collapse the many MLAAD model names into one domain,
+    while retaining the two separately generated families used by this corpus.
+    """
+
+    family = record.generator_family or ""
+    voice = "mms" if "MMS-TTS-KOR" in family else "mlaad" if "MLAAD:" in family else "none"
+    music = "audioldm2" if "AudioLDM2" in family else "musicgen" if "MusicGen" in family else "none"
+    return voice, music
+
+
+def domain_label_signature(record: ManifestRecord) -> tuple[object, ...]:
+    """Label signature augmented with coarse fake-generator domains."""
+
+    voice_domain, music_domain = coarse_generator_domain(record)
+    return (
+        record.voice_present,
+        record.music_present,
+        record.voice_fake,
+        record.music_fake,
+        record.file_fake,
+        voice_domain,
+        music_domain,
+    )
+
+
+def assign_domain_stratified_group_splits(
+    records: Iterable[ManifestRecord],
+    *,
+    seed: int = 2609,
+    train_ratio: float = 0.7,
+    dev_ratio: float = 0.15,
+) -> dict[str, str]:
+    """Create source-group-disjoint splits covering coarse generator domains.
+
+    Unlike a generator-holdout diagnostic, this production split represents
+    every available coarse generator domain in train/dev/holdout whenever a
+    stratum has at least three source groups.  Exact speaker/content parent
+    groups remain atomic, so the change does not introduce source leakage.
+    """
+
+    records = list(records)
+    if train_ratio <= 0 or dev_ratio <= 0 or train_ratio + dev_ratio >= 1:
+        raise ValueError("split ratios must leave positive train, dev, and holdout ratios")
+    grouped: dict[str, list[ManifestRecord]] = {}
+    for record in records:
+        grouped.setdefault(record.split_group, []).append(record)
+
+    strata: dict[tuple[tuple[object, ...], ...], list[str]] = {}
+    for group, group_records in grouped.items():
+        signature = tuple(sorted({domain_label_signature(record) for record in group_records}, key=str))
+        strata.setdefault(signature, []).append(group)
+
+    assignments: dict[str, str] = {}
+    for signature, groups in strata.items():
+        groups.sort(key=lambda group: hashlib.sha256(f"{seed}:{signature}:{group}".encode()).digest())
+        count = len(groups)
+        train_count = max(1, int(count * train_ratio))
+        dev_count = max(1, int(count * dev_ratio)) if count >= 3 else 0
+        holdout_count = max(1, count - train_count - dev_count) if count >= 3 else 0
+        while train_count + dev_count + holdout_count > count and train_count > 1:
+            train_count -= 1
+        if train_count + dev_count + holdout_count < count:
+            train_count += count - train_count - dev_count - holdout_count
+        for index, group in enumerate(groups):
+            split = (
+                "train" if index < train_count
+                else "dev" if index < train_count + dev_count
+                else "holdout"
+            )
+            for record in grouped[group]:
+                assignments[record.sample_id] = split
+    return assignments

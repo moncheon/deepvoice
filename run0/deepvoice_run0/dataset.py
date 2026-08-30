@@ -9,7 +9,7 @@ from typing import Any, Iterable
 import numpy as np
 
 from .audio import decode_audio, to_mid_side
-from .manifest import ManifestRecord
+from .manifest import ManifestRecord, coarse_generator_domain
 from .segmentation import segment_audio
 
 
@@ -91,3 +91,22 @@ def inverse_group_weights(records: Iterable[ManifestRecord]) -> np.ndarray:
     groups = [record.generator_family or record.source_dataset for record in records]
     counts = Counter(groups)
     return np.asarray([1.0 / counts[group] for group in groups], dtype=np.float64)
+
+
+def training_stratum(record: ManifestRecord) -> tuple[object, ...]:
+    """Balance task labels and broad domains, not individual generator names."""
+
+    return (
+        record.voice_present,
+        record.music_present,
+        record.voice_fake,
+        record.music_fake,
+        *coarse_generator_domain(record),
+    )
+
+
+def inverse_training_stratum_weights(records: Iterable[ManifestRecord]) -> np.ndarray:
+    records = list(records)
+    strata = [training_stratum(record) for record in records]
+    counts = Counter(strata)
+    return np.asarray([1.0 / counts[stratum] for stratum in strata], dtype=np.float64)

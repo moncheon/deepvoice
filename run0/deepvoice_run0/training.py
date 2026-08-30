@@ -15,7 +15,7 @@ from typing import Any, Iterable
 import numpy as np
 
 from .constants import PREDICTION_COLUMNS
-from .dataset import ManifestDataset, collate_records, inverse_group_weights
+from .dataset import ManifestDataset, collate_records, inverse_training_stratum_weights
 from .losses import multitask_loss
 from .manifest import ManifestRecord, assign_group_splits, read_manifest
 from .metrics import official_metrics
@@ -63,7 +63,7 @@ def _loader(
     if num_workers > 0:
         options.update(persistent_workers=True, prefetch_factor=2)
     if training:
-        weights = inverse_group_weights(records)
+        weights = inverse_training_stratum_weights(records)
         sample_count = len(weights) if samples_per_epoch is None else min(
             len(weights), max(1, int(samples_per_epoch))
         )

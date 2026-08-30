@@ -9,11 +9,13 @@ import numpy as np
 
 from deepvoice_run0.manifest import (
     ManifestRecord,
+    assign_domain_stratified_group_splits,
     assign_group_splits,
     assign_stratified_group_splits,
     read_manifest,
     write_manifest,
 )
+from deepvoice_run0.dataset import inverse_training_stratum_weights, training_stratum
 from deepvoice_run0.mixing import Component, mix_components
 
 
@@ -79,6 +81,35 @@ class ManifestMixingTests(unittest.TestCase):
         assignments = assign_stratified_group_splits(records)
         counts = {name: list(assignments.values()).count(name) for name in set(assignments.values())}
         self.assertEqual(counts, {"train": 2, "dev": 1, "holdout": 1})
+
+    def test_domain_split_covers_generator_and_preserves_groups(self) -> None:
+        records = [
+            replace(
+                make_record(f"mms-{index}", f"group-{index}"),
+                generator_family="MMS-TTS-KOR",
+                generator_model="facebook/mms-tts-kor",
+                voice_fake=1,
+                file_fake=1,
+            )
+            for index in range(9)
+        ]
+        assignments = assign_domain_stratified_group_splits(records)
+        self.assertEqual(set(assignments.values()), {"train", "dev", "holdout"})
+        self.assertEqual(len(assignments), len(records))
+
+    def test_training_sampler_collapses_exact_mlaad_families(self) -> None:
+        first = replace(
+            make_record("a", "a"), generator_family="MLAAD:model-a",
+            generator_model="a", voice_fake=1, file_fake=1,
+        )
+        second = replace(
+            make_record("b", "b"), generator_family="MLAAD:model-b",
+            generator_model="b", voice_fake=1, file_fake=1,
+        )
+        real = make_record("c", "c")
+        self.assertEqual(training_stratum(first), training_stratum(second))
+        weights = inverse_training_stratum_weights([first, second, real])
+        self.assertTrue(np.allclose(weights, [0.5, 0.5, 1.0]))
 
     def test_mixing_derives_component_and_file_labels(self) -> None:
         voice = Component(np.ones((1, 10), dtype=np.float32), "voice", 0, "v")

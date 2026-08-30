@@ -34,6 +34,13 @@ def required_env(name: str) -> str:
     return value
 
 
+def safe_dataset_relative(name: str) -> Path:
+    pure = PurePosixPath(name)
+    if pure.is_absolute() or not pure.parts or ".." in pure.parts:
+        raise RuntimeError(f"unsafe dataset-relative path: {name}")
+    return Path(*pure.parts)
+
+
 def safe_extract(archive_path: Path, destination: Path) -> None:
     destination_resolved = destination.resolve()
     with tarfile.open(archive_path, "r:") as archive:
@@ -56,8 +63,13 @@ def prepare_corpus() -> dict[str, object]:
         raise RuntimeError("unsupported shard manifest format")
     corpus_source = DATASET_MOUNT / "corpus-v1"
     DATA_ROOT.mkdir(parents=True, exist_ok=False)
-    for name in ("manifest.jsonl", "splits.json", "SUMMARY.json", "AUDIT.json"):
+    for name in ("manifest.jsonl", "SUMMARY.json", "AUDIT.json"):
         shutil.copy2(corpus_source / name, DATA_ROOT / name)
+    split_relative = safe_dataset_relative(
+        os.environ.get("RUN0_SPLIT_RELATIVE", "corpus-v1/splits.json")
+    )
+    split_source = DATASET_MOUNT / split_relative
+    shutil.copy2(split_source, DATA_ROOT / "splits.json")
     actual_manifest_hash = sha256_file(DATA_ROOT / "manifest.jsonl")
     if actual_manifest_hash != shard_manifest["corpus_manifest_sha256"]:
         raise RuntimeError("corpus manifest hash does not match shard manifest")
@@ -87,6 +99,8 @@ def prepare_corpus() -> dict[str, object]:
         "dataset_repo": required_env("RUN0_CORPUS_REPO"),
         "dataset_revision": required_env("RUN0_CORPUS_REVISION"),
         "manifest_sha256": actual_manifest_hash,
+        "split_relative": split_relative.as_posix(),
+        "split_sha256": sha256_file(DATA_ROOT / "splits.json"),
         "files_verified": len(records),
         "shards_verified": len(shard_manifest["shards"]),
     }
