@@ -23,6 +23,7 @@ class TrainingEvidenceTests(unittest.TestCase):
         self.assertGreaterEqual(training["min_epochs"], 4)
         self.assertEqual(training["consistency_loss_weight"], 0.0)
         self.assertEqual(training["domain_loss_weight"], 0.0)
+        self.assertFalse(training["allow_partial_holdout_metrics"])
 
     def test_reviewed_backbone_is_pinned_and_allowlisted(self) -> None:
         root = Path(__file__).parents[1]
@@ -61,6 +62,8 @@ class TrainingEvidenceTests(unittest.TestCase):
         )
         metrics = _metrics_from_arrays(labels, scores)
         self.assertAlmostEqual(metrics["weighted_score"], 1.0)
+        self.assertAlmostEqual(metrics["ads"], 1.0)
+        self.assertAlmostEqual(metrics["cps"], 1.0)
 
 
 if __name__ == "__main__":

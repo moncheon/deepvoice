@@ -24,6 +24,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--resume-weights", type=Path)
     parser.add_argument(
+        "--resume-checkpoint",
+        type=Path,
+        help="Tensor-safe epoch-boundary checkpoint directory.",
+    )
+    parser.add_argument(
         "--wall-clock-seconds",
         type=int,
         help="Stop before starting a new epoch after this training duration.",
@@ -59,6 +64,7 @@ def main() -> None:
         allow_fixture_training=args.allow_fixture_smoke_training,
         split_path=args.splits,
         resume_weights=args.resume_weights,
+        resume_checkpoint_dir=args.resume_checkpoint,
         wall_clock_seconds=args.wall_clock_seconds,
     )
     print(f"Saved tensor-only weights after {len(metadata['history'])} epoch(s): {args.output_dir}")

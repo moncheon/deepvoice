@@ -1,0 +1,47 @@
+[audio]
+sample_rate = 16000
+window_seconds = 4.0
+hop_seconds = 2.0
+all_windows_until_seconds = 16.0
+uniform_segments = 12
+novelty_segments = 4
+max_segments = 16
+
+[model]
+backbone_path = "model/backbone"
+weights_path = "model/run0.safetensors"
+hidden_size = 256
+music_channels = 48
+layer_fusion_count = 8
+segment_chunk_size = 4
+
+[training]
+seed = 2608
+batch_size = 2
+effective_batch_size = 16
+auto_batch_candidates = [16, 12, 8, 4, 2]
+auto_batch_memory_gate_gib = 70
+max_segments_per_file = 4
+samples_per_epoch = 4800
+gradient_checkpointing = false
+epochs = 8
+min_epochs = 4
+early_stopping_patience = 20
+learning_rate = 0.0001
+backbone_learning_rate = 0.00002
+weight_decay = 0.01
+warmup_ratio = 0.05
+rank_loss_weight = 0.25
+consistency_loss_weight = 0.0
+domain_loss_weight = 0.0
+selection_metric = "ads"
+record_holdout_each_epoch = true
+allow_partial_holdout_metrics = true
+deterministic_epoch_seeding = true
+num_workers = 8
+evaluation_batch_size = 8
+
+[inference]
+batch_size = 1
+device = "cuda"
+strict = true

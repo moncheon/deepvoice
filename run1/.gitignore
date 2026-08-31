@@ -1,0 +1,6 @@
+build/
+work/
+model/
+reports/private/
+__pycache__/
+*.pyc

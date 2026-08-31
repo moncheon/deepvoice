@@ -1,0 +1,285 @@
+{
+  "calibration_rows": 512,
+  "calibration_split_groups": 490,
+  "fold_count": 13,
+  "folds": [
+    {
+      "axis": "generator",
+      "excluded_split_groups": 2018,
+      "fold_id": "gen-voice-01",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1783,
+        "generator_holdout": 3514,
+        "holdout": 314,
+        "train": 18389
+      },
+      "targets": [
+        "facebook/mms-tts-kor",
+        "microsoft vibevoice 1.5b",
+        "nari dia2",
+        "parler_tts_large_v1",
+        "sesame_csm"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1979,
+      "fold_id": "gen-voice-02",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1997,
+        "generator_holdout": 3467,
+        "holdout": 317,
+        "train": 18219
+      },
+      "targets": [
+        "f5-tts",
+        "fishtts",
+        "index-tts-2.0",
+        "kyutai-tts",
+        "llasa-1b-multilingual",
+        "marvis-tts",
+        "minimax_speech-2.6-hd",
+        "nari dia-1.6b",
+        "orpheus-tts-0.1-finetune",
+        "spark-tts-0.5b",
+        "suno_bark",
+        "vixtts"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1985,
+      "fold_id": "gen-voice-03",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1917,
+        "generator_holdout": 3469,
+        "holdout": 325,
+        "train": 18289
+      },
+      "targets": [
+        "cartesia.ai (sonic-3)",
+        "deepgram",
+        "kani-tts-370m",
+        "llasa-8b",
+        "mars5",
+        "matchatts",
+        "melotts",
+        "microsoft vibevoice large",
+        "neutts-air",
+        "openvoicev2",
+        "ringg squirrel tts v1.0",
+        "supertonic"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1970,
+      "fold_id": "gen-voice-04",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 2052,
+        "generator_holdout": 3464,
+        "holdout": 350,
+        "train": 18134
+      },
+      "targets": [
+        "edge-tts",
+        "fireredtts-2.0",
+        "index-tts-1.5",
+        "indri-tts-0.1",
+        "kitten-tts-nano-0.2",
+        "megatts3",
+        "metavoice-1b",
+        "minicpm-o-2.6",
+        "outetts",
+        "soulx-podcast",
+        "voxcpm-0.5b",
+        "zonostts-v0.1"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1987,
+      "fold_id": "gen-voice-05",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 2026,
+        "generator_holdout": 3475,
+        "holdout": 317,
+        "train": 18182
+      },
+      "targets": [
+        "chatterbox",
+        "e2-tts",
+        "facebook_mms-tts-eng",
+        "higgs-audio-v2",
+        "kitten-tts-nano-0.1",
+        "kokoro",
+        "microsoft_speecht5_tts",
+        "minimax_speech-02-turbo",
+        "rvc",
+        "step-audio-editx",
+        "veena",
+        "voxcpm-1.5"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1972,
+      "fold_id": "gen-voice-06",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1932,
+        "generator_holdout": 3470,
+        "holdout": 352,
+        "train": 18246
+      },
+      "targets": [
+        "griffin_lim",
+        "maya1 tts",
+        "openaudio-s1-mini",
+        "optispeech",
+        "parler_tts_mini_v0.1",
+        "parler_tts_mini_v1",
+        "qwen2.5-omni",
+        "resemble.ai (april 12th, 2025)",
+        "suno_bark-small",
+        "voxtream",
+        "whisperspeech",
+        "zipvoice"
+      ],
+      "task": "voice"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 5785,
+      "fold_id": "gen-music-01",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1307,
+        "generator_holdout": 8688,
+        "holdout": 1377,
+        "train": 12628
+      },
+      "targets": [
+        "facebook/musicgen-small"
+      ],
+      "task": "music"
+    },
+    {
+      "axis": "generator",
+      "excluded_split_groups": 1542,
+      "fold_id": "gen-music-02",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1999,
+        "generator_holdout": 3104,
+        "holdout": 1259,
+        "train": 17638
+      },
+      "targets": [
+        "cvssp/audioldm2-music"
+      ],
+      "task": "music"
+    },
+    {
+      "axis": "codec",
+      "excluded_split_groups": 4154,
+      "fold_id": "codec-01",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1420,
+        "generator_holdout": 8749,
+        "holdout": 1206,
+        "train": 12625
+      },
+      "targets": [
+        "bandpass_300_3400|downsample_8k|mulaw8|upsample_16k"
+      ],
+      "task": "all"
+    },
+    {
+      "axis": "codec",
+      "excluded_split_groups": 4129,
+      "fold_id": "codec-02",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1447,
+        "generator_holdout": 8786,
+        "holdout": 1136,
+        "train": 12631
+      },
+      "targets": [
+        "lr_gain_asymmetry|right_polarity_flip|soft_and_hard_clip"
+      ],
+      "task": "all"
+    },
+    {
+      "axis": "codec",
+      "excluded_split_groups": 4179,
+      "fold_id": "codec-03",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1458,
+        "generator_holdout": 8575,
+        "holdout": 1081,
+        "train": 12886
+      },
+      "targets": [
+        "pcm16|mono"
+      ],
+      "task": "all"
+    },
+    {
+      "axis": "codec",
+      "excluded_split_groups": 4199,
+      "fold_id": "codec-04",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1363,
+        "generator_holdout": 8822,
+        "holdout": 1138,
+        "train": 12677
+      },
+      "targets": [
+        "pcm16|stereo"
+      ],
+      "task": "all"
+    },
+    {
+      "axis": "codec",
+      "excluded_split_groups": 4137,
+      "fold_id": "codec-05",
+      "panel_rows": 256,
+      "split_counts": {
+        "dev": 1379,
+        "generator_holdout": 8704,
+        "holdout": 1144,
+        "train": 12773
+      },
+      "targets": [
+        "three_tap_room|white_noise_approx_28db"
+      ],
+      "task": "all"
+    }
+  ],
+  "format_version": 1,
+  "plan_sha256": "a206d4533e398d431da954e9053c76680c844b9e2b2d22817ce3c6f5832d73f7",
+  "seed": 2608,
+  "settings": {
+    "calibration_size": 512,
+    "codec_folds": 5,
+    "music_folds": 2,
+    "panel_size": 256,
+    "voice_folds": 6
+  },
+  "status": "audited"
+}

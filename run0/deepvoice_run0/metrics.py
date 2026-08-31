@@ -91,4 +91,12 @@ def official_metrics(
         + OFFICIAL_WEIGHTS["voice_present"] * metrics["voice_presence_auc"]
         + OFFICIAL_WEIGHTS["music_present"] * metrics["music_presence_auc"]
     )
+    metrics["ads"] = (
+        0.50 * (1.0 - metrics["file_eer"])
+        + 0.20 * (1.0 - metrics["voice_fake_eer"])
+        + 0.30 * (1.0 - metrics["music_fake_eer"])
+    )
+    metrics["cps"] = 0.50 * (
+        metrics["voice_presence_auc"] + metrics["music_presence_auc"]
+    )
     return metrics

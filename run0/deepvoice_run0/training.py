@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import random
+import shutil
 import time
 from pathlib import Path
 from typing import Any, Iterable
@@ -190,6 +191,7 @@ def evaluate_model(
     loader: Any,
     *,
     device: str,
+    compute_official_metrics: bool = True,
 ) -> tuple[dict[str, float], np.ndarray, list[str]]:
     """Evaluate a sequential loader and return official metrics and probabilities."""
 
@@ -218,7 +220,7 @@ def evaluate_model(
             for name in labels:
                 labels[name].extend(int(value) for value in batch["labels"][name].tolist())
     scores = np.concatenate(probabilities, axis=0)
-    metrics = _metrics_from_arrays(labels, scores)
+    metrics = _metrics_from_arrays(labels, scores) if compute_official_metrics else {}
     for index, name in enumerate(PREDICTION_COLUMNS):
         metrics[f"std_{name.lower()}"] = float(scores[:, index].std())
     return metrics, scores, sample_ids
@@ -268,6 +270,113 @@ def _state_dict(model: Any) -> dict[str, Any]:
     }
 
 
+def _atomic_save_safetensors(save_file: Any, tensors: dict[str, Any], path: Path) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    save_file(tensors, str(temporary))
+    temporary.replace(path)
+
+
+def _save_resume_checkpoint(
+    *,
+    output: Path,
+    model: Any,
+    optimizer: Any,
+    scheduler: Any,
+    epoch_completed: int,
+    history: list[dict[str, object]],
+    best_epoch: int,
+    best_score: float,
+    patience: int,
+    selection_metric: str,
+    save_file: Any,
+) -> Path:
+    checkpoint = output / "resume"
+    checkpoint.mkdir(parents=True, exist_ok=True)
+    _atomic_save_safetensors(save_file, _state_dict(model), checkpoint / "model.safetensors")
+    optimizer_state = optimizer.state_dict()
+    optimizer_tensors: dict[str, Any] = {}
+    optimizer_scalars: dict[str, dict[str, object]] = {}
+    for parameter_id, values in optimizer_state["state"].items():
+        scalar_values: dict[str, object] = {}
+        for name, value in values.items():
+            if hasattr(value, "detach"):
+                optimizer_tensors[f"state.{parameter_id}.{name}"] = (
+                    value.detach().cpu().contiguous()
+                )
+            else:
+                scalar_values[name] = value
+        optimizer_scalars[str(parameter_id)] = scalar_values
+    _atomic_save_safetensors(
+        save_file, optimizer_tensors, checkpoint / "optimizer.safetensors"
+    )
+    if (output / "run0.safetensors").is_file():
+        shutil.copy2(output / "run0.safetensors", checkpoint / "best.safetensors")
+    state = {
+        "format_version": 1,
+        "epoch_completed": epoch_completed,
+        "history": history,
+        "best_epoch": best_epoch,
+        "best_score": best_score,
+        "patience": patience,
+        "selection_metric": selection_metric,
+        "optimizer": {
+            "param_groups": optimizer_state["param_groups"],
+            "scalar_state": optimizer_scalars,
+        },
+        "scheduler": scheduler.state_dict(),
+    }
+    temporary = checkpoint / "state.json.tmp"
+    temporary.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(checkpoint / "state.json")
+    return checkpoint
+
+
+def _load_resume_checkpoint(
+    *,
+    checkpoint: Path,
+    model: Any,
+    optimizer: Any,
+    scheduler: Any,
+    load_file: Any,
+    selection_metric: str,
+) -> dict[str, object]:
+    required = {
+        "model.safetensors", "optimizer.safetensors", "state.json", "best.safetensors"
+    }
+    missing_files = [name for name in required if not (checkpoint / name).is_file()]
+    if missing_files:
+        raise FileNotFoundError(f"resume checkpoint is incomplete: {missing_files}")
+    state = json.loads((checkpoint / "state.json").read_text(encoding="utf-8"))
+    if state.get("format_version") != 1:
+        raise ValueError("unsupported resume checkpoint format")
+    if state.get("selection_metric") != selection_metric:
+        raise ValueError("resume checkpoint selection metric differs from config")
+    missing, unexpected = model.load_state_dict(
+        load_file(str(checkpoint / "model.safetensors"), device="cpu"), strict=False
+    )
+    if missing or unexpected:
+        raise RuntimeError(f"resume model mismatch; missing={missing}, unexpected={unexpected}")
+    tensor_state = load_file(str(checkpoint / "optimizer.safetensors"), device="cpu")
+    optimizer_payload = state["optimizer"]
+    reconstructed: dict[int, dict[str, object]] = {}
+    for parameter_id, scalar_values in optimizer_payload["scalar_state"].items():
+        reconstructed[int(parameter_id)] = dict(scalar_values)
+    for key, tensor in tensor_state.items():
+        prefix, raw_parameter_id, name = key.split(".", 2)
+        if prefix != "state":
+            raise ValueError(f"invalid optimizer tensor key: {key}")
+        reconstructed.setdefault(int(raw_parameter_id), {})[name] = tensor
+    optimizer.load_state_dict({
+        "state": reconstructed,
+        "param_groups": optimizer_payload["param_groups"],
+    })
+    scheduler.load_state_dict(state["scheduler"])
+    return state
+
+
 def train(
     *,
     manifest_path: str | Path,
@@ -278,7 +387,9 @@ def train(
     allow_fixture_training: bool = False,
     split_path: str | Path | None = None,
     resume_weights: str | Path | None = None,
+    resume_checkpoint_dir: str | Path | None = None,
     wall_clock_seconds: int | None = None,
+    epoch_callback: Any | None = None,
 ) -> dict[str, object]:
     """Train Run0 without downloading data or a backbone."""
 
@@ -352,6 +463,8 @@ def train(
         model.backbone, "gradient_checkpointing_enable"
     ):
         model.backbone.gradient_checkpointing_enable()
+    if resume_weights is not None and resume_checkpoint_dir is not None:
+        raise ValueError("resume_weights and resume_checkpoint_dir are mutually exclusive")
     if resume_weights is not None:
         missing, unexpected = model.load_state_dict(
             load_file(str(resume_weights), device="cpu"), strict=False
@@ -429,11 +542,42 @@ def train(
     patience_limit = int(training.get("early_stopping_patience", 2))
     started = time.monotonic()
     trainable_backbone = list(backbone_parameters)
+    selection_metric = str(training.get("selection_metric", "weighted_score"))
+    if selection_metric not in {"weighted_score", "ads"}:
+        raise ValueError("selection_metric must be 'weighted_score' or 'ads'")
+    record_holdout_each_epoch = bool(training.get("record_holdout_each_epoch", False))
+    allow_partial_holdout_metrics = bool(
+        training.get("allow_partial_holdout_metrics", False)
+    )
+    start_epoch = 0
+    if resume_checkpoint_dir is not None:
+        resume_state = _load_resume_checkpoint(
+            checkpoint=Path(resume_checkpoint_dir),
+            model=model,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            load_file=load_file,
+            selection_metric=selection_metric,
+        )
+        start_epoch = int(resume_state["epoch_completed"])
+        history = list(resume_state["history"])
+        best_epoch = int(resume_state["best_epoch"])
+        best_score = float(resume_state["best_score"])
+        patience = int(resume_state["patience"])
+        shutil.copy2(Path(resume_checkpoint_dir) / "best.safetensors", best_path)
+        shutil.copy2(Path(resume_checkpoint_dir) / "model.safetensors", last_path)
 
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
         if wall_clock_seconds is not None and epoch >= min_epochs:
             if time.monotonic() - started >= wall_clock_seconds:
                 break
+        if bool(training.get("deterministic_epoch_seeding", False)):
+            epoch_seed = seed + 1009 * epoch
+            random.seed(epoch_seed)
+            np.random.seed(epoch_seed)
+            torch.manual_seed(epoch_seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(epoch_seed)
         for parameter in trainable_backbone:
             parameter.requires_grad_(epoch > 0)
         model.train()
@@ -467,21 +611,39 @@ def train(
             del losses, batch
         save_file(_state_dict(model), str(last_path))
         dev_metrics, dev_scores, dev_ids = evaluate_model(model, dev_loader, device=device)
+        epoch_holdout_metrics: dict[str, float] | None = None
+        if record_holdout_each_epoch:
+            epoch_holdout_metrics, epoch_holdout_scores, epoch_holdout_ids = evaluate_model(
+                model,
+                holdout_loader,
+                device=device,
+                compute_official_metrics=not allow_partial_holdout_metrics,
+            )
+            _write_predictions(
+                output / "epochs" / f"epoch-{epoch + 1:02d}-holdout_predictions.csv",
+                by_split["holdout"],
+                epoch_holdout_scores,
+                epoch_holdout_ids,
+            )
         epoch_record: dict[str, object] = {
             "epoch": epoch + 1,
             "train_loss": float(np.mean(totals)),
             "dev": dev_metrics,
             "elapsed_seconds": float(time.monotonic() - started),
         }
+        if epoch_holdout_metrics is not None:
+            epoch_record["holdout"] = epoch_holdout_metrics
         history.append(epoch_record)
         print(json.dumps({
             "event": "epoch_complete",
             "epoch": epoch + 1,
             "train_loss": epoch_record["train_loss"],
             "dev_weighted_score": dev_metrics["weighted_score"],
+            "dev_ads": dev_metrics["ads"],
+            "selection_metric": selection_metric,
             "elapsed_seconds": epoch_record["elapsed_seconds"],
         }, sort_keys=True), flush=True)
-        score = float(dev_metrics["weighted_score"])
+        score = float(dev_metrics[selection_metric])
         if score > best_score:
             best_score = score
             best_epoch = epoch + 1
@@ -495,11 +657,27 @@ def train(
                 "history": history,
                 "best_epoch": best_epoch,
                 "best_dev_score": best_score,
+                "selection_metric": selection_metric,
                 "selected_batch_size": batch_size,
                 "gradient_accumulation_steps": accumulation_steps,
             }, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
+        checkpoint = _save_resume_checkpoint(
+            output=output,
+            model=model,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            epoch_completed=epoch + 1,
+            history=history,
+            best_epoch=best_epoch,
+            best_score=best_score,
+            patience=patience,
+            selection_metric=selection_metric,
+            save_file=save_file,
+        )
+        if epoch_callback is not None:
+            epoch_callback(output, checkpoint, epoch + 1)
         if epoch + 1 >= min_epochs and patience >= patience_limit:
             break
 
@@ -510,7 +688,10 @@ def train(
         raise RuntimeError(f"best state mismatch; missing={missing}, unexpected={unexpected}")
     model.to(device).eval()
     holdout_metrics, holdout_scores, holdout_ids = evaluate_model(
-        model, holdout_loader, device=device
+        model,
+        holdout_loader,
+        device=device,
+        compute_official_metrics=not allow_partial_holdout_metrics,
     )
     _write_predictions(
         output / "holdout_predictions.csv", by_split["holdout"], holdout_scores, holdout_ids
@@ -531,11 +712,14 @@ def train(
             "epochs_completed": len(history),
             "wall_clock_seconds": float(time.monotonic() - started),
             "fixture_smoke_training": bool(fixture_records),
+            "selection_metric": selection_metric,
+            "resumed_from_epoch": start_epoch,
         },
         "data": {
             "manifest_sha256": _sha256(manifest),
             "splits_sha256": _sha256(Path(split_path)) if split_path is not None else None,
             "split_counts": {name: len(values) for name, values in by_split.items()},
+            "holdout_official_metrics_computed": not allow_partial_holdout_metrics,
         },
         "best_dev_metrics": best_dev_metrics,
         "holdout_metrics": holdout_metrics,

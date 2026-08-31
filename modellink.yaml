@@ -5,16 +5,16 @@ storage:
   repo_id: datahj/deepvoice2608
   repo_type: model
   private: true
-  revision: 8671000ad992b8e9e58558c6869126fb7b635a88
+  revision: 04838c48e679f30f76901cfdfa9bfb08ec92fa07
   repository_url: https://huggingface.co/datahj/deepvoice2608
-  tree_url: https://huggingface.co/datahj/deepvoice2608/tree/8671000ad992b8e9e58558c6869126fb7b635a88/storage
+  tree_url: https://huggingface.co/datahj/deepvoice2608/tree/04838c48e679f30f76901cfdfa9bfb08ec92fa07/storage
 
 models:
   - id: df_arena_1b
     role: baseline_component_fake_detector
     local_path: format/baseline_submit/model/df_arena_1b/pytorch_model.bin
     storage_path: storage/df_arena_1b/pytorch_model.bin
-    url: https://huggingface.co/datahj/deepvoice2608/resolve/8671000ad992b8e9e58558c6869126fb7b635a88/storage/df_arena_1b/pytorch_model.bin
+    url: https://huggingface.co/datahj/deepvoice2608/resolve/04838c48e679f30f76901cfdfa9bfb08ec92fa07/storage/df_arena_1b/pytorch_model.bin
     bytes: 4591794734
     sha256: 780bc14fd4c15e65d58efdef728427cf03cd29cd60be528e97badf8c89087988
     git_tracked: false
@@ -23,7 +23,7 @@ models:
     role: baseline_voice_music_separator
     local_path: format/baseline_submit/model/htdemucs/955717e8-8726e21a.th
     storage_path: storage/htdemucs/955717e8-8726e21a.th
-    url: https://huggingface.co/datahj/deepvoice2608/resolve/8671000ad992b8e9e58558c6869126fb7b635a88/storage/htdemucs/955717e8-8726e21a.th
+    url: https://huggingface.co/datahj/deepvoice2608/resolve/04838c48e679f30f76901cfdfa9bfb08ec92fa07/storage/htdemucs/955717e8-8726e21a.th
     bytes: 84141911
     sha256: 8726e21a993978c7ba086d3872e7608d7d5bfca646ca4aca459ffda844faa8b4
     git_tracked: false
@@ -32,9 +32,51 @@ models:
     role: baseline_voice_music_presence_detector
     local_path: format/baseline_submit/model/panns/Cnn14_mAP=0.431.pth
     storage_path: storage/panns/Cnn14_mAP=0.431.pth
-    url: https://huggingface.co/datahj/deepvoice2608/resolve/8671000ad992b8e9e58558c6869126fb7b635a88/storage/panns/Cnn14_mAP=0.431.pth
+    url: https://huggingface.co/datahj/deepvoice2608/resolve/04838c48e679f30f76901cfdfa9bfb08ec92fa07/storage/panns/Cnn14_mAP=0.431.pth
     bytes: 327428481
     sha256: 0dc499e40e9761ef5ea061ffc77697697f277f6a960894903df3ada000e34b31
+    git_tracked: false
+
+  - id: wavlm_base_plus_run1
+    role: run1_voice_backbone
+    local_path: run1/model/run0/backbone/model.safetensors
+    repo_id: datahj/deepvoice-run0-model-v1
+    revision: 246d81ddcc299f5862c4f46c1df50e5704906c0c
+    storage_path: final/run0-v1/backbone/model.safetensors
+    repository_url: https://huggingface.co/datahj/deepvoice-run0-model-v1
+    url: https://huggingface.co/datahj/deepvoice-run0-model-v1/resolve/246d81ddcc299f5862c4f46c1df50e5704906c0c/final/run0-v1/backbone/model.safetensors
+    bytes: 377555928
+    sha256: 8f1f0adf5eb20d7c049ae512949fdc16cb846a631cb9b7a3ff7da4a147b069ff
+    license: CC-BY-SA-3.0
+    git_tracked: false
+
+  - id: run1_hybrid_epoch5
+    role: run1_ads_rank_fusion_head
+    local_path: run1/model/run0/run0.safetensors
+    repo_id: datahj/deepvoice-run1-model-v1
+    revision: 846a91ab5f5453a0b14a6048c3b9889ed66472b1
+    storage_path: final/run1-hybrid/run0.safetensors
+    repository_url: https://huggingface.co/datahj/deepvoice-run1-model-v1
+    url: https://huggingface.co/datahj/deepvoice-run1-model-v1/resolve/846a91ab5f5453a0b14a6048c3b9889ed66472b1/final/run1-hybrid/run0.safetensors
+    artifacts_url: https://huggingface.co/datahj/deepvoice-run1-model-v1/tree/846a91ab5f5453a0b14a6048c3b9889ed66472b1/final/run1-hybrid
+    bytes: 385309396
+    sha256: 511c17a7fd1e84abe76f6c0918bfca5fc8e2676555eb3f8b71ac5b48f1d02666
+    selected_epoch: 5
+    selection_metric: robust_nested_logo_ads
+    git_tracked: false
+
+artifacts:
+  - id: run1_hybrid_submission_78269
+    role: dacon_submission_archive
+    local_path: run1/build/submit-run1-hybrid.zip
+    repo_id: datahj/deepvoice2608
+    revision: 04838c48e679f30f76901cfdfa9bfb08ec92fa07
+    storage_path: storage/run1-hybrid/submissions/8f083e5bfcf104eb3527461949871446faad62cfbbf8d8d4f00042c004268b36/submit-run1-hybrid.zip
+    repository_url: https://huggingface.co/datahj/deepvoice2608
+    url: https://huggingface.co/datahj/deepvoice2608/resolve/04838c48e679f30f76901cfdfa9bfb08ec92fa07/storage/run1-hybrid/submissions/8f083e5bfcf104eb3527461949871446faad62cfbbf8d8d4f00042c004268b36/submit-run1-hybrid.zip
+    bytes: 5766695853
+    sha256: 8f083e5bfcf104eb3527461949871446faad62cfbbf8d8d4f00042c004268b36
+    dacon_submission_id: 78269
     git_tracked: false
 
 restore:

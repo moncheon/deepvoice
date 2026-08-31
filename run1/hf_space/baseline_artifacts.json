@@ -1,0 +1,22 @@
+{
+  "files": {
+    "df_arena_1b/pytorch_model.bin": {
+      "bytes": 4591794734,
+      "sha256": "780bc14fd4c15e65d58efdef728427cf03cd29cd60be528e97badf8c89087988",
+      "storage_path": "storage/df_arena_1b/pytorch_model.bin"
+    },
+    "htdemucs/955717e8-8726e21a.th": {
+      "bytes": 84141911,
+      "sha256": "8726e21a993978c7ba086d3872e7608d7d5bfca646ca4aca459ffda844faa8b4",
+      "storage_path": "storage/htdemucs/955717e8-8726e21a.th"
+    },
+    "panns/Cnn14_mAP=0.431.pth": {
+      "bytes": 327428481,
+      "sha256": "0dc499e40e9761ef5ea061ffc77697697f277f6a960894903df3ada000e34b31",
+      "storage_path": "storage/panns/Cnn14_mAP=0.431.pth"
+    }
+  },
+  "format_version": 1,
+  "source_repo": "datahj/deepvoice2608",
+  "source_revision": "8671000ad992b8e9e58558c6869126fb7b635a88"
+}

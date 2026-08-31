@@ -1,0 +1,32 @@
+{
+  "competition_id": 236749,
+  "format_version": 1,
+  "leaderboard_observed_at": "2026-08-31T18:36:47+09:00",
+  "memo": "Run1 Hybrid | PANNs presence + Baseline/Run0 ECDF rank fusion | LOGO e5 | L4 1138.5s",
+  "result": {
+    "ads": 0.6680079365,
+    "cps": 0.9893249735,
+    "public_rank": 88,
+    "runtime_seconds": 1430,
+    "runtime_text": "23분 50초",
+    "total": 0.7001396402
+  },
+  "submission": {
+    "archive_bytes": 5766695853,
+    "archive_sha256": "8f083e5bfcf104eb3527461949871446faad62cfbbf8d8d4f00042c004268b36",
+    "filename": "submit-run1-hybrid.zip",
+    "id": 78269,
+    "submitted_at": "2026-08-31T18:10:29+09:00"
+  },
+  "validation": {
+    "exact_l4_count": 1200,
+    "exact_l4_peak_process_memory_mib": 5306,
+    "exact_l4_wall_seconds": 1138.525659672,
+    "logo_paired_bootstrap_lower_95": 0.00114221539182309,
+    "logo_robust_ads_improvement_vs_run0": 0.014722679093567281,
+    "logo_selected_epoch": 5,
+    "logo_status": "passed",
+    "logo_worst_fold_ads_delta": 0.02573529411764708,
+    "source_bundle_sha256": "4359d7e7067c59f20fa1b2fff51a2afd27fb3ec8ad803df750b554edaf0b3908"
+  }
+}
